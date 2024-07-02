@@ -155,12 +155,18 @@ lemma tsum_indicator_walk_position_eq (X : (t : ℕ) → Ω → Grid d)
     ∑' x, Set.indicator ((X t) ⁻¹' {x}) (fun _ ↦ c) ω = c := by
   apply tsum_indicator_singleton_eq
 
+/-- A walk is always somewhere, so it is easy to calculate the sum over positions
+of the regularized occupations at those positions. -/
+lemma tsum_walkRegularizedOccupation_eq_geom_series (walk : (t : ℕ) → Grid d) (r : ℝ≥0∞) :
+    ∑' x, walkRegularizedOccupation walk r x = ∑' (t : ℕ), r ^ t := by
+-- Instead of literal Fubini's theorem (for counting measures), here it is better to use
+-- the version `ENNReal.tsum_comm`.
+  sorry
+
 /-- A random walk is always somewhere, so it is easy to calculate the sum over positions
 of the regularized occupations at those positions. -/
 lemma tsum_regularizedOccupation_eq_geom_series (X : (t : ℕ) → Ω → Grid d) (r : ℝ≥0∞) :
     ∑' x, regularizedOccupation X r x = fun _ ↦ (∑' (t : ℕ), r ^ t):= by
--- Instead of literal Fubini's theorem (for counting measures), here it is better to use
--- the version `ENNReal.tsum_comm`.
   sorry
 
 /-- A walk is always somewhere, so it is easy to calculate the sum over positions
