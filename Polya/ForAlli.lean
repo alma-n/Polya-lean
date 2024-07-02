@@ -51,5 +51,5 @@ def regularizedG (r : ℝ≥0∞) (x : Grid d) : ℝ :=
 
 lemma tsum_regularizedG_eq_tsum (r : ℝ≥0) (h : r < 1) :
   ∑' x, regularizedG P ξ r x = ∑' t, r ^ t * (∫ ω, ∑' x, Set.indicator ((RW ξ t) ⁻¹' {x}) (Function.const _ (1 : ℝ)) ω ∂P) :=
-  convert integral_prod
+  -- convert integral_prod
   sorry

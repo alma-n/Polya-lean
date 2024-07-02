@@ -5,6 +5,10 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     devenv.url = "github:cachix/devenv";
+    lean4 = {
+      url = "github:leanprover/lean4";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -104,10 +108,19 @@
           # system.
 
           devenv.shells.default = {
-            packages = [ (python.withPackages (p: [ p.leanblueprint ])) ];
+            packages =
+              [
+                (python.withPackages (p: [ p.leanblueprint ]))
+                # inputs.lean4.packages.${system}.lake
+                pkgs.elan
+              ]
+              ++ (with inputs.lean4.packages.${system}; [
+                lean
+                leanc
+              ]);
             languages.python = {
-              package = python;
               enable = true;
+              package = python;
               # venv.enable = true;
             };
           };
