@@ -101,6 +101,15 @@
             })
           ];
           python = pkgs.python3.override { packageOverrides = lib.composeManyExtensions pythonOverrides; };
+          leanblueprint = (python.withPackages (p: [ p.leanblueprint ]));
+          watch-blueprint = pkgs.writeShellScriptBin "watch-blueprint" ''
+            echo "Watching for changes in blueprint/src/content.tex..."
+            ${pkgs.inotify-tools}/bin/inotifywait -q -e close_write,moved_to,create -r -m ./blueprint/src/content.tex |
+              while read -r directory events filename; do
+                rm -rf blueprint/web
+                ${leanblueprint}/bin/leanblueprint web
+              done
+          '';
         in
         {
           # Per-system attributes can be defined here. The self' and inputs'
@@ -110,7 +119,8 @@
           devenv.shells.default = {
             packages =
               [
-                (python.withPackages (p: [ p.leanblueprint ]))
+                leanblueprint
+                watch-blueprint
                 # inputs.lean4.packages.${system}.lake
                 pkgs.elan
               ]
