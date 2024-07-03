@@ -75,7 +75,7 @@ lemma walkRegularizedOccupation_mono (walk : (t : ℕ) → Grid d) :
   sorry
 
 /-- Regularized occupation of any walk with regularization `r` is at most `(1-r)⁻¹`. -/
-def walkRegularizedOccupation_le (walk : (t : ℕ) → Grid d) (r : ℝ≥0∞) (x : Grid d) :
+lemma walkRegularizedOccupation_le (walk : (t : ℕ) → Grid d) (r : ℝ≥0∞) (x : Grid d) :
     walkRegularizedOccupation walk r x ≤ (1 - r)⁻¹ := by
 -- Remark by Kalle: It is "funny" (and convenient) that here we do not need to assume `r<1`,
 -- which is usually needed for the convergence of the geometric series. That is because in `ℝ≥0∞`
@@ -173,7 +173,7 @@ of the regularized occupations at those positions. -/
 lemma tsum_toReal_walkRegularizedOccupation_eq_geom_series (walk : (t : ℕ) → Grid d)
     {r : ℝ≥0} (r_lt_one : r < 1) :
     ∑' x, (walkRegularizedOccupation walk r x).toReal = (∑' (t : ℕ), r.toReal ^ t):= by
--- To get to use the standard Fubili's theorem `lintegral_lintegral_swap`, one can first
+-- To get to use the standard Fubini's theorem `lintegral_lintegral_swap`, one can first
 -- rewrite the sums as integrals (w.r.t. counting measures) with `lintegral_count`.
   sorry
 
@@ -183,6 +183,15 @@ lemma tsum_toReal_regularizedOccupation_eq_geom_series (X : (t : ℕ) → Ω →
     {r : ℝ≥0} (r_lt_one : r < 1) (ω : Ω) :
     ∑' x, (regularizedOccupation X r x ω).toReal = ∑' (t : ℕ), r.toReal ^ t := by
 -- This is easy with the previous one!
+  sorry
+
+/-- A random walk is always somewhere, so it is easy to calculate the sum over positions
+of the regularized occupations at those positions. When `r < 1`, the infinite sums are
+convergent and the calculation yields an equality in `ℝ`. -/
+lemma tsum_toReal_regularizedOccupation_eq (X : (t : ℕ) → Ω → Grid d)
+    {r : ℝ≥0} (r_lt_one : r < 1) (ω : Ω) :
+    ∑' x, (regularizedOccupation X r x ω).toReal = (1 - r)⁻¹ := by
+-- This is the previous one conbined with a convergent geometric series.
   sorry
 
 /-- The sum over points of the expected value of the regularized occupation is a
@@ -224,7 +233,7 @@ def regularizedG (X : (t : ℕ) → Ω → Grid d) (r : ℝ≥0∞) (x : Grid d)
 
 /-- An auxiliary step: one can interchange a sum and expected value for `regularizedG` summed over
 all grid points. -/
-lemma tsum_regularizedG_eq_tsum'' {X : (t : ℕ) → Ω → Grid d}
+lemma tsum_regularizedG_eq_lintegral_tsum {X : (t : ℕ) → Ω → Grid d}
     {r : ℝ≥0} (r_lt_one : r < 1) (X_mble : ∀ t, Measurable (X t)) :
     ∑' x, regularizedG P X r x
       = (∫ ω, ∑' x, ∑' t,
@@ -251,16 +260,6 @@ lemma summable_weighted_occupation {walk : (t : ℕ) → Grid d}
 lemma summable_regularized_occupation {walk : (t : ℕ) → Grid d} {r : ℝ≥0} (r_lt_one : r < 1) :
     Summable (Function.uncurry fun (t : ℕ) (x : Grid d) ↦ Set.indicator {x} (fun _ ↦ (r : ℝ) ^ t) (walk t)) := by
 -- The idea is to get this from the slightly generalized version `summable_weighted_occupation`.
-  sorry
-
-/-- A further auxiliary step: one can interchange two sums and an expected value for
-`regularizedG` summed over all grid points. -/
-lemma tsum_regularizedG_eq_tsum''' {X : (t : ℕ) → Ω → Grid d}
-    {r : ℝ≥0} (r_lt_one : r < 1) (X_mble : ∀ t, Measurable (X t)) :
-    ∑' x, regularizedG P X r x
-      = (∫ ω, ∑' t, ∑' x, Set.indicator ((X t) ⁻¹' {x}) (fun _ ↦ (r : ℝ) ^ t) ω ∂P) := by
--- For this one, `tsum_comm` looks like the best version of Fubini's theorem, once one
--- has applied the earlier auxiliary `tsum_regularizedG_eq_tsum''`.
   sorry
 
 lemma tsum_regularizedG_eq {X : (t : ℕ) → Ω → Grid d}
