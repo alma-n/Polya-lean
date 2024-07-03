@@ -1,6 +1,5 @@
 import Mathlib
-import Polya.MiscLemmas -- Someting in the repository setup makes this fail for me...
--- We should fix the setup so that others can have a functioning repository as well.
+import Polya.MiscLemmas
 
 open MeasureTheory Topology Filter
 open ENNReal NNReal
