@@ -1,0 +1,320 @@
+\chapter{Random walks and their occupations}
+
+
+
+\section{Random walks on the $d$-dimensional integer grid}
+
+\begin{definition}
+  \label{def:grid}
+  \lean{Grid}
+  \leanok
+  The $d$-dimensional integer \textbf{grid} is $\bZ^d$.
+\end{definition}
+
+A walk on the grid $\bZ^d$ is a function
+$\walk \colon \bN \to \bZ^d$, denoted $t \mapsto \walk(t)$).
+We construct walks from their sequences of steps as follows:
+  
+\begin{definition}
+  \label{def:walk}
+  \lean{deftest}
+  \uses{def:grid}
+  \leanok
+  A sequence $(u_s)_{s \in \bN}$ of steps in $\bZ^d$
+  determines a \textbf{walk} $\walk \colon \bN \to \bZ^d$ by
+  \begin{align}\label{eq: RW def}
+  \walk(t) = \sum_{0 \le s < t} u_s .
+  \end{align}
+\end{definition}
+
+A random walk is constructed from a sequence of random steps.
+
+\begin{definition}
+  \label{def:random_walk}
+  \uses{def:walk}
+  \lean{RW}
+  \leanok
+  A sequence $(\xi_s)_{s \in \bN}$ of $\bZ^d$-valued
+  random variables (on some a probability space)
+  determines a \textbf{random walk} $\RW = \big(\RW(t)\big)_{t \in \bN}$ by
+  \[ \RW(t) = \sum_{0 \le s < t} \xi_s . \]
+\end{definition}
+
+\begin{lemma}
+  \label{lem:RW_mble}
+  \uses{def:random_walk}
+  \lean{RW.measurable}
+  The position $\RW(t)$ of a
+  random walk $\RW = \big(\RW(t)\big)_{t \in \bN}$
+  at any time $t \in \bN$ is a $\bZ^d$-valued random variable.
+\end{lemma}
+\begin{proof}
+We must prove that $\RW(t) \colon \Omega \to \bZ^d$ is measurable.
+Since each of the steps $\xi_s \colon \Omega \to \bZ^d$ is measurable by
+assumption and the position of the
+random walk is defined in~\eqref{eq: RW def} by summing the
+first $t$ steps, the measurability follows by induction
+on $t$ using the fact that sums of measurable $\bZ^d$-valued
+functions are measurable.
+\end{proof}
+
+
+
+\section{Regularized occupation}
+
+
+\subsection*{Regularized occupation of a walk}
+
+\begin{definition}
+  \label{def:walkRegOccup}
+  \lean{walkRegularizedOccupation}
+  \uses{def:walk}
+  \leanok
+  Let $\walk \colon \bN \to \bZ^d$ be a walk and let $r \ge 0$.
+  Then the \textbf{$r$-regularized occupation}
+  of $\walk$ at $x \in \bZ^d$ is
+  \begin{align}\label{eq: reg walk occupation}
+  L^{\walk}_r(x) = \sum_{t \in \bN} r^t \, \indOf{\set{\walk(t) = x}} .
+  \end{align}
+\end{definition}
+
+\begin{lemma}
+  \label{lem:walkRegOccup_incr}
+  \uses{def:walkRegOccup}
+  \lean{walkRegularizedOccupation_mono}
+  The $r$-regularized occupation $L^{\walk}_r(x)$
+  of a walk $\walk$ is an increasing
+  function of $r$.
+\end{lemma}
+\begin{proof}
+Each term in the defining sum \eqref{eq: reg walk occupation}
+is increasing.
+\end{proof}
+
+\begin{lemma}
+  \label{lem:walk_regOcc_geometric_bound}
+  \uses{def:walkRegOccup}
+  \lean{walkRegularizedOccupation_le}
+  The $r$-regularized occupation $L^{\walk}_r(x)$
+  of a walk $\walk$ at any point $x \in \bZ^d$
+  satisfies $L^{\walk}_r(x) \le \frac{1}{1-r}$.
+\end{lemma}
+\begin{proof}
+Calculate, using the definition \eqref{eq: reg walk occupation}:
+\begin{align*}
+L^{\walk}_r(x) = \sum_{t \in \bN} r^t \, \indOf{\set{\walk(t) = x}}
+    \le \sum_{t \in \bN} r^t = \frac{1}{1-r}.
+\end{align*}
+\end{proof}
+
+\begin{lemma}
+  \label{lem:sum_walk_regOcc_eq_geom_ser}
+  \uses{def:walkRegOccup}
+  \lean{tsum_walkRegularizedOccupation_eq_geom_series}
+  The sum over all points $x \in \bZ^d$ of the $r$-regularized
+  occupations $L^\walk_r(x)$ of a walk $\walk \colon \bN \to \bZ^d$ is
+  \begin{align*}
+  \sum_{x \in \bZ^d} L^\walk_r(x) = \sum_{t \in \bN} r^t .
+  \end{align*}
+  (Both sides above are infinite if $r \ge 1$, but the equality
+  nevertheless holds in $[0,+\infty]$.)
+\end{lemma}
+\begin{proof}
+Unravel the definitions and interchange the two summations by Fubini's theorem:
+\begin{align*}
+\sum_{x \in \bZ^d} L^\walk_r(x)
+= & \; \sum_{x \in \bZ^d} \sum_{t \in \bN} r^t \, \indOf{\set{\walk(t) = x}} \\
+= & \; \sum_{t \in \bN} \underbrace{\sum_{x \in \bZ^d} r^t \, \indOf{\set{\walk(t) = x}}}_{=r^t}.
+\end{align*}
+Here we noticed in the last expression that since at time $t$ the walk is
+at exactly one point, there is exactly one value of~$x$ which contributes
+to the sum over~$x$, and this contribution is $r^t$.
+\end{proof}
+
+
+\subsection*{Regularized occupation of a random walk}
+
+\begin{definition}
+  \label{def:regularized occupation}
+  \lean{regularizedOccupation}
+  \uses{def:walkRegOccup}
+  \leanok
+  Let $\RW$ be a random walk on $\bZ^d$ and let $r \ge 0$.
+  Then the \textbf{$r$-regularized occupation}
+  of $\RW$ at $x \in \bZ^d$ is
+  \begin{align}\label{eq: reg occupation}
+  L_r(x) = L^{\RW}_r(x) = \sum_{t \in \bN} r^t \, \indOf{\set{\RW(t) = x}} .
+  \end{align}
+\end{definition}
+
+\begin{lemma}
+  \label{lem:regularized occupation_mble}
+  \uses{def:regularized occupation}
+  \lean{regularizedOccupation.measurable}
+  The regularized occupation $L_r(x)$ of a random walk $RW$
+  is a $[0,+\infty]$-valued random variable.
+\end{lemma}
+\begin{proof}
+\uses{lem:RW_mble}
+\ldots
+\end{proof}
+
+\begin{lemma}
+  \label{lem:regularized_occupation_incr}
+  \uses{def:regularized occupation}
+  \lean{regularizedOccupation_mono}
+  The $r$-regularized occupation $L_r(x)$
+  of a random walk $\RW$ is increasing in $r$.
+\end{lemma}
+\begin{proof}
+\uses{lem:walkRegOccup_incr}
+This follows from Lemma~\ref{lem:walkRegOccup_incr}.
+\end{proof}
+
+\begin{lemma}
+  \label{lem:regularized_occupation_geometric_bound}
+  \uses{def:regularized occupation}
+  \lean{regularizedOccupation_le}
+  The $r$-regularized occupation $L_r(x)$
+  of a random walk $\RW$ at any point $x \in \bZ^d$
+  satisfies $L_r(x) \le \frac{1}{1-r}$.
+\end{lemma}
+\begin{proof}
+\uses{lem:walk_regOcc_geometric_bound}
+Follows from Lemma~\ref{lem:walk_regOcc_geometric_bound}.
+\end{proof}
+
+\begin{lemma}
+  \label{lem:regularized_occupation_left_cont}
+  \uses{def:regularized occupation}
+  \lean{regularizedOccupation_apply_tendsto_of_monotone}
+  If $(r_n)_{n \in \bN}$ is an increasing sequence with
+  limit $r = \lim_{n \to \infty} r_n$, then
+  for any $x \in \bZ^d$ the random variables $L_{r_n}(x)$
+  have limit $L_{r}(x) = \lim_{n \to \infty} L_{r_n}(x)$.
+\end{lemma}
+\begin{proof}
+\uses{lem:walkRegOccup_incr}
+This uses a monotone convergence theorem:
+each term $r_n^t \, \indOf{\set{\RW(t) = x}}$ of the infinite
+sum~\eqref{eq: reg occupation} is increasing and has
+limit $r^t \, \indOf{\set{\RW(t) = x}}$ (by continuity of the
+$t$-power function $\rho \mapsto \rho^t$), so the sum is
+increasing and the limit of the sum is the sum of the limits.
+\end{proof}
+
+\begin{lemma}
+  \label{lem:sum_regularized_occupation_eq_geom_ser}
+  \uses{def:regularized occupation}
+  \lean{tsum_regularizedOccupation_eq_geom_series}
+  The sum over all points $x \in \bZ^d$ of the $r$-regularized
+  occupations $L_r(x)$ of a random walk $\RW$ is
+  \begin{align*}
+  \sum_{x \in \bZ^d} L_r(x) = \sum_{t \in \bN} r^t .
+  \end{align*}
+  (Both sides above are infinite if $r \ge 1$, but the equality
+  nevertheless holds in $[0,+\infty]$.)
+\end{lemma}
+\begin{proof}
+\uses{lem:sum_walk_regOcc_eq_geom_ser}
+This is a random walk version of Lemma~\ref{lem:sum_walk_regOcc_eq_geom_ser},
+but the right hand side expression does not depend on the walk, so there
+is no randomness involved (the right hand side is a constant random variable).
+\end{proof}
+
+\begin{lemma}
+  \label{lem:sum_regularized_occupation_eq}
+  \uses{def:regularized occupation}
+  \lean{tsum_toReal_regularizedOccupation_eq}
+  If $r<1$, then the infinite sum in
+  Lemma~\ref{lem:sum_regularized_occupation_eq_geom_ser} is convergent
+  in~$\bR$, and the equality
+  \begin{align*}
+  \sum_{x \in \bZ^d} L_r(x) = \frac{1}{1-r}
+  \end{align*}
+  holds in $\bR$.
+\end{lemma}
+\begin{proof}
+\uses{lem:sum_regularized_occupation_eq_geom_ser}
+Apply Lemma~\ref{lem:sum_regularized_occupation_eq_geom_ser}
+and the sum of a geometric series.
+\end{proof}
+
+\begin{lemma}
+  \label{lem:sum_expected_regularized_occupation_bound}
+  \uses{def:regularized occupation}
+  \lean{tsum_lintegral_norm_regularizedOccupation_le}
+  If $r<1$, then the
+  sum over points of the expected absolute values $|L_r(x)|$ of the regularized
+  occupation of a random walk $\RW$ has the upper bound
+  \begin{align*}
+  \sum_{x \in \bZ^d} \EX \Big[ \big| L_r(x) \big| \Big] \le \frac{1}{1-r} 
+  \end{align*}
+\end{lemma}
+\begin{proof}
+\uses{lem:sum_regularized_occupation_eq}
+Interchange the expected value and the sum by Fubini's theorem:
+\begin{align*}
+\sum_{x \in \bZ^d} \EX \Big[ \big| L_r(x) \big| \Big]
+= \sum_{x \in \bZ^d} \EX \Big[ \big| L_r(x) \big| \Big] .
+\end{align*}
+Then notice that $|L_r(x)| = L_r(x)$, and apply
+Lemma~\ref{lem:sum_regularized_occupation_eq}.
+\end{proof}
+
+
+
+\section{Green's function}
+
+\begin{definition}
+  \label{def:Green_function}
+  \lean{regularizedG}
+  \uses{def:regularized occupation}
+  \leanok
+  Let $\RW$ be a random walk on $\bZ^d$ and let $0 \le r < 1$.
+  Then the \textbf{$r$-regularized Green's function}
+  of $\RW$ is the function $\Greg{r} \colon \bZ^d \to \bR$
+  whose value at $x \in \bZ^d$ is the expected value of the
+  regularized occupation $L_r(x)$ at $x$,
+  \begin{align}\label{eq: reg Green}
+  \Greg{r}(x) = \EX \big[ L_r(x) \big] .
+  \end{align}
+\end{definition}
+
+\begin{lemma}
+  \label{lem:sum_Green_function_aux}
+  \uses{def:Green_function}
+  \lean{tsum_regularizedG_eq_lintegral_tsum}
+  We have
+  \begin{align*}
+  \sum_{x \in \bZ^d} \Greg{r}(x) = \EX \Big[ \sum_{x \in \bZ^d} L_r(x) \Big] .
+  \end{align*}
+\end{lemma}
+\begin{proof}
+\uses{lem:sum_expected_regularized_occupation_bound}
+Interchange the expected value and the sum by Fubini's theorem.
+The integrability hypotheses for the appropriate version of Fubini's theorem
+follow from Lemma~\ref{lem:sum_expected_regularized_occupation_bound}.
+\end{proof}
+
+\begin{lemma}
+  \label{lem:sum_Green_function}
+  \uses{def:Green_function}
+  \lean{tsum_regularizedG_eq}
+  We have
+  \begin{align*}
+  \sum_{x \in \bZ^d} \Greg{r}(x) = \frac{1}{1-r} .
+  \end{align*}
+\end{lemma}
+\begin{proof}
+\uses{lem:sum_Green_function_aux, lem:sum_regularized_occupation_eq}
+First apply Lemma~\ref{lem:sum_Green_function_aux} to interchange the expected value
+and the sum over~$x$. Then apply Lemma~\ref{lem:sum_regularized_occupation_eq}.
+This yields
+\begin{align*}
+\sum_{x \in \bZ^d} \Greg{r}(x) = \EX \Big[ \sum_{x \in \bZ^d} L_r(x) \Big]
+  = \EX \Big[ \frac{1}{1-r} \Big] = \frac{1}{1-r} ,
+\end{align*}
+where the last equality is just taking the expected value of a constant.
+\end{proof}
+
