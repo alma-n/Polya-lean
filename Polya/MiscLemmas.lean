@@ -21,7 +21,7 @@ lemma tsum_pi_ennreal_apply {ι α : Type*} (fs : ι → α → ℝ≥0∞) (a :
 -- automatic in other ways!
 -- The proof needs `tendsto_pi_nhds`, which is the convenient characterization of convergence
 -- in the topology of pointwise convergence (product topology, hence the "pi").
-  sorry
+  exact ENNReal.tsum_apply
 
 -- Kalle says: This should definitely be in Mathlib...
 instance MeasureTheory.sigmaFinite_count
@@ -45,6 +45,8 @@ lemma MeasureTheory.count_prod_count
 lemma summable_of_summable_toNNReal {ι : Type*} {f : ι → ℝ}
     (f_nn : ∀ i, 0 ≤ f i) (hf : Summable (fun i ↦ (f i).toNNReal)) :
     Summable f := by
+  rw [Summable] at *
+  cases' hf with r hr
   sorry
 
 -- Kalle says: I would have expected to find (a generalized version of) this in Mathlib...
