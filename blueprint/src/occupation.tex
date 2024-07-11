@@ -318,3 +318,30 @@ This yields
 where the last equality is just taking the expected value of a constant.
 \end{proof}
 
+
+
+\section{Expected occupation from the Green's function}
+
+\begin{lemma}
+  \label{lem:Green_function_nonregularized_limit}
+  \uses{def:Green_function}
+  Let $\RW = \big(\RW(t)\big)_{t \in \bN}$ be a random walk
+  starting from the origin $\vec{0} \in \bZ^d$. Denote by
+  $L = \# \set{t \in \bN \, \Big| \, X(t) = \vec{0}}$ the number of times
+  the random walk is at the origin. Then we have
+  \begin{align*}
+  \Greg{r}(\vec{0}) \nearrow \EX [L] \qquad \text{ as } r \nearrow 1 .
+  \end{align*}
+\end{lemma}
+\begin{proof}
+\uses{lem:regularized_occupation_left_cont}
+Recall that $\Greg{r}(\vec{0}) = \EX \big[ L_r(\vec{0}) \big]$ by definition,
+and observe that $L = L_1(\vec{0})$. Therefore the statement is equivalent
+to $\Greg{r}(\vec{0}) \nearrow \Greg{1} (\vec{0})$ as $r \nearrow 1$.
+For this, it suffices to prove that
+whenever $(r_n)_{n \in \bN}$ is an increasing sequence with
+limit $1 = \lim_{n \to \infty} r_n$, then
+$\Greg{r_n}(\vec{0}) \nearrow \Greg{1}(\vec{0})$ as $n \to \infty$.
+Lemma \ref{lem:regularized_occupation_left_cont}
+shows exactly that.
+\end{proof}

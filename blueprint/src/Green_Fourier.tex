@@ -1,0 +1,56 @@
+\chapter{Fourier transform of Green's function}
+
+\section{Fourier transform of the regularized Green's function}
+
+\begin{definition}
+  \label{def:Green_Fourier_transf}
+  \uses{def:Green_function}
+  Let $0 \le r < 1$.
+  The \textbf{Fourier transform} of the regularized Green's function
+  $\Greg{r} \, \colon \, \bZ^d \to \R$
+  is the function
+  \begin{align*}
+  \Freg{r} \, \colon \, \bR^d \to \C
+  \end{align*}
+  given by
+  \begin{align*}
+  \Freg{r} (\theta) = \sum_{x \in \bZ^d} e^{\ii x \cdot \theta} \, \Greg{r}(x) .
+  \end{align*}
+\end{definition}
+
+\section{Explicit formula for the Fourier transform}
+
+\section{Inversion of the discrete Fourier transform}
+
+\begin{lemma}
+  \label{lem:Green_Fourier_inverse}
+  \uses{def:Green_Fourier_transf}
+  For any $x \in \bZ^d$ and $0 \le r < 1$, we have
+  \begin{align*}
+  \Greg{r} (\theta)
+  = \frac{1}{(2\pi)^d} \iint_{\Fbox} e^{-\ii x \cdot \theta} \, \Freg{r} (\theta) \, \ud^d \theta .
+  \end{align*}
+\end{lemma}
+\begin{proof}
+\ldots
+\end{proof}
+
+Recall that we are interested in $\EX[L]$, where $L$ is the number of visits to the
+origin by the random walk. Lemma~\ref{lem:Green_function_nonregularized_limit}
+states that $\EX[L]$ is the increasing limit of $\Greg{r}(\vec{0})$ as $r \nearrow 1$,
+and Lemma~\ref{lem:Green_Fourier_inverse} gives a formula for $\Greg{r}(\vec{0})$
+in terms of the Fourier transform.
+
+% This allows to express the
+% \begin{corollary}
+%   \label{lem:Green_Fourier_inverse}
+%   \uses{def:Green_Fourier_transf}
+%   For any $x \in \bZ^d$ and $0 \le r < 1$, we have
+%   \begin{align*}
+%   \Greg{x} (\theta)
+%   = \frac{1}{(2\pi)^d} \iint_{\Fbox} e^{-\ii x \cdot \theta} \, \Freg{r} (\theta) \, \ud^d \theta .
+%   \end{align*}
+% \end{corollary}
+% \begin{proof}
+% \ldots
+% \end{proof}

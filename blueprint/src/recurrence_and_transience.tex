@@ -1,0 +1,96 @@
+\chapter{Recurrence and transience}
+
+Let $\RW = \big(\RW(t)\big)_{t \in \bN}$ be a random walk on a graph with
+vertex set $\Gr$, starting from $x_0 \in \Gr$.
+
+\section{Basic definition}
+
+\begin{definition}%[Recurrence]
+  \label{def:recurrence}
+  %\uses{def:walk}
+  %\lean{RW}
+  %\leanok
+  %A random walk $\RW = \big(\RW(t)\big)_{t \in \bN}$ on a graph with
+  %vertex set $\Gr$, starting from $x_0 \in \Gr$,
+  The random walk $\RW = \big(\RW(t)\big)_{t \in \bN}$
+  is said to be \textbf{recurrent} if
+  \begin{align*}
+  \PR\Big[ X(t) = x_0 \text{ for infinitely many } t \in \bN \Big] \, = \, 1
+  \end{align*}
+  and \textbf{transient} if
+  \begin{align*}
+  \PR\Big[ X(t) = x_0 \text{ for infinitely many } t \in \bN \Big] \, = \, 0 .
+  \end{align*}
+
+\end{definition}
+
+
+
+\section{Equivalent conditions}
+
+Usually random walks are taken to be Markov processes (Markovian random walks).
+Then one can use alternative formulations of recurrence and transience.
+
+\begin{definition}%[Expectation recurrence]
+  \label{def:expectation_recurrence}
+  %\uses{def:walk}
+  %\lean{RW}
+  %\leanok
+  %Let $\RW = \big(\RW(t)\big)_{t \in \bN}$ be a random walk on a graph with
+  %vertex set $\Gr$, starting from $x_0 \in \Gr$.
+  Denote by
+  $L = \# \set{t \in \bN \, \Big| \, X(t) = x_0}$ the number of times
+  the random walk $\RW = \big(\RW(t)\big)_{t \in \bN}$ is at its starting point.
+  The random walk $X$ is said to be \textbf{expectation recurrent} if
+  $\EX [ L ] \, = \, +\infty$
+  and \textbf{expectation transient} if
+  $\EX [ L ] \; < \; +\infty$.
+\end{definition}
+
+\begin{definition}%[First return recurrence]
+  \label{def:Markovian_recurrence}
+  %\uses{def:walk}
+  %\lean{RW}
+  %\leanok
+  %A random walk $\RW = \big(\RW(t)\big)_{t \in \bN}$ on a graph with
+  %vertex set $\Gr$, starting from $x_0 \in \Gr$,
+  The random walk $\RW = \big(\RW(t)\big)_{t \in \bN}$
+  is said to be \textbf{first return recurrent} if
+  $\PR\big[ X(t) = x_0 \text{ for some } t > 0 \big] \, = \, 1$
+  and \textbf{first return transient} if
+  $\PR\big[ X(t) = x_0 \text{ for some } t > 0 \big] \; < \; 1$.
+\end{definition}
+
+\begin{lemma}
+  \label{lem:recurrent_iff_expectation_recurrent}
+  \uses{def:recurrence, def:expectation_recurrence}
+  A Markovian random walk $\RW = \big(\RW(t)\big)_{t \in \bN}$ is recurrent
+  %(in the sense of Definition~\ref{def:recurrence})
+  if and only if it is
+  expectation recurrent.
+  %(in the sense of Definition~\ref{def:expectation_recurrence}).
+\end{lemma}
+\begin{proof}
+\ldots
+\end{proof}
+
+\begin{lemma}
+  \label{lem:recurrent_iff_return_recurrent}
+  \uses{def:recurrence, def:Markovian_recurrence}
+  A Markovian random walk $\RW = \big(\RW(t)\big)_{t \in \bN}$ is recurrent
+  %(in the sense of Definition~\ref{def:recurrence})
+  if and only if it is
+  first return recurrent.
+  %(in the sense of Definition~\ref{def:Markovian_recurrence}).
+\end{lemma}
+\begin{proof}
+\ldots
+\end{proof}
+
+Simple random walks are Markovian, so the previous two lemmas imply that
+Definitions~\ref{def:recurrence},
+\ref{def:expectation_recurrence} and \ref{def:Markovian_recurrence} are logically
+equivalent for a simple random walk.
+This project first establishes expectation recurrence
+in Theorem~\ref{thm:Polya_alt}; the other
+formulations are obtained as consequences.

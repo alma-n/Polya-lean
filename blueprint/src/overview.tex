@@ -1,0 +1,50 @@
+\chapter{P\'olya's theorem}
+
+The goal of this project is to prove that:
+\begin{quote}
+A drunk man will find his way home, but a drunk bird may get lost forever.
+
+\emph{--- Shizuo Kakutani}
+
+\url{https://mathshistory.st-andrews.ac.uk/Biographies/Kakutani/quotations/}
+\end{quote}
+
+
+Somewhat more mathematically, the goal is the following:
+
+\begin{theorem}[P\'olya's theorem]
+  \label{thm:Polya}
+  %\uses{def:random_walk}
+  %\lean{RW.measurable}
+  The simple random walk $\RW = \big( \RW(t) \big)_{t \in \bN}$
+  on the $d$-dimensional grid $\bZ^d$ is recurrent if $d \le 2$
+  and transient if $d \, > \, 2$.
+%   Let $\RW = \big( \RW(t) \big)_{t \in \bN}$ be a simple random walk
+%   on the $d$-dimensional grid $\bZ^d$.
+\end{theorem}
+\begin{proof}
+\uses{lem:recurrent_iff_expectation_recurrent, thm:Polya_alt}
+Theorem~\ref{thm:Polya_alt} below asserts that $X$
+is expectation recurrent iff $d \le 2$,
+and Lemma~\ref{lem:recurrent_iff_expectation_recurrent}
+shows that recurrence and expectation recurrence are equivalent
+for the simple random walk.
+\end{proof}
+
+The essence of the proof is to establishe the following slightly modified
+version of the theorem.
+
+\begin{theorem}[P\'olya's theorem, alternative form]
+  \label{thm:Polya_alt}
+  %\uses{def:random_walk}
+  %\lean{RW.measurable}
+  The simple random walk $\RW = \big( \RW(t) \big)_{t \in \bN}$
+  on the $d$-dimensional grid $\bZ^d$ is expectation recurrent if $d \le 2$
+  and expectation transient if $d \, > \, 2$.
+%   Let $\RW = \big( \RW(t) \big)_{t \in \bN}$ be a simple random walk
+%   on the $d$-dimensional grid $\bZ^d$.
+\end{theorem}
+\begin{proof}
+\uses{lem:Green_function_nonregularized_limit}
+\ldots
+\end{proof}
