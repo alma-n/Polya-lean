@@ -125,8 +125,8 @@
                 pkgs.elan
               ]
               ++ (with inputs.lean4.packages.${system}; [
-                lean
-                leanc
+                #lean
+                #leanc
               ]);
             languages.python = {
               enable = true;
