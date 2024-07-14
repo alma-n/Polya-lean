@@ -1,9 +1,81 @@
 \chapter{Treatment of the integral in the Fourier inversion}
 
+In this part, we analyze the integral
+\begin{align}
+I_r = \iint_{\Fbox} \Freg{r} (\theta) \; \ud^d \theta ,
+\end{align}
+where $\Freg{r} \colon \bR^d \to \bC$ is the Fourier transform of the
+regularized Green's function of a random walk $\RW$ on $\bZ^d$. By
+Corollary~\ref{cor:recurrence_iff_finite_limit_integral}, the finiteness
+of this integral in the limit $r \nearrow 1$ characterizes expectation
+transience of $\RW$.
+
 \section{Decomposition of the integral}
+
+\begin{lemma}
+  \label{lem:integral_decomposition}
+  \uses{def:Green_Fourier_transf}
+  For any $0 < \delta \le \pi$ we can write
+  \begin{align*}
+  I_r = J_r^{(\delta)} + K_r^{(\delta)},
+  \end{align*}
+  where the two parts are
+  \begin{align}
+  J_r^{(\delta)} = \; & \iint_{\Fbox \setminus B_\delta} \Freg{r} (\theta) \; \ud^d \theta \\
+  K_r^{(\delta)} = \; & \iint_{B_\delta} \Freg{r} (\theta) \; \ud^d \theta ,
+  \end{align}
+  where $B_\delta := \set{ \theta \in \bR^d \, \big| \, \|\theta\| < \delta}$ is the
+  ball of radius $\delta$ centered at $\vec{0} \in \bR^d$.
+\end{lemma}
+\begin{proof}
+Obvious, since $\Fbox = (\Fbox \setminus B_\delta) \cup B_\delta$
+is a disjoint union.
+\end{proof}
+
 
 \section{Dominated convergence away from the origin}
 
+TODO: Define non-degenerate step distribution (essentially $\sum_{u\in \bZ^d} p(u) e^{\ii u \cdot \theta} \ne 1$ for $\theta \ne 0$ modulo periodicity).
+
+\begin{lemma}
+  \label{lem:integral_away}
+  \uses{lem:integral_decomposition}
+  If $\RW$ is a time-homogeneous Markovian random walk with suitable
+  non-degeneracy conditions on its step distribution (to be written down more precisely),
+  then for any $0 < \delta \le \pi$ the limit
+  \begin{align*}
+  \lim_{r \nearrow 1} J_r^{(\delta)}
+  \end{align*}
+  exists and is finite (limit in $\bR$).
+\end{lemma}
+\begin{proof}
+Under the nondegeneracy conditions, on the compact set $\Fbox \setminus B_\delta$,
+the continuous integrand $\theta \mapsto \Freg{r}(\theta)$
+is bounded (and therefore dominated by a constant function) and
+it has the pointwise limit $\lim_{r \nearrow 1} \Freg{r}(\theta) = \Freg{1}(\theta)$.
+It therefore follows from the dominated convergence theorem
+that $\lim_{r \nearrow 1} J_r^{(\delta)} = J_1^{(\delta)} \in \bR$.
+\end{proof}
+
 \section{Monotone convergence near the origin}
 
+TODO: Think about the best conditions for step distribution under which monotone convergence can be applied (real-valuedness requires symmetricity of the step-distribution?!?).
+
+\begin{lemma}
+  \label{lem:integral_near}
+  \uses{lem:integral_decomposition}
+  If $\RW$ is a time-homogeneous Markovian random walk with suitable
+  symmetricity and integrability conditions on its step distribution (to be written down more precisely),
+  then there exists a $\delta_0 > 0$ such that for any $0 < \delta \le \delta_0$, the limit
+  \begin{align*}
+  \lim_{r \nearrow 1} K_r^{(\delta)}
+  \end{align*}
+  is increasing and exists in $[0,+\infty]$.
+\end{lemma}
+\begin{proof}
+\ldots
+\end{proof}
+
+
 \section{Characterizing finiteness of the integral}
+

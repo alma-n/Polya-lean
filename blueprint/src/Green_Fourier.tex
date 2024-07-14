@@ -20,6 +20,34 @@
 
 \section{Explicit formula for the Fourier transform}
 
+\begin{lemma}
+  \label{lem:Markovian_Green_Fourier}
+  \uses{def:Green_Fourier_transf, def:iid_random_walk}
+  For a time-homogeneous random walk $\RW = \big(\RW(t)\big)_{t \in \bN}$ on $\bZ^d$
+  with step distribution $p \colon \bZ^d \to [0,1]$,
+  the Fourier transform of the Green's function is
+  \begin{align*}
+  \Freg{r} (\theta) = \Big(1 - r \sum_{u\in \bZ^d} p(u) e^{\ii u \cdot \theta}\Big)^{-1} .
+  \end{align*}
+\end{lemma}
+\begin{proof}
+\ldots
+\end{proof}
+
+\begin{lemma}
+  \label{lem:SRW_Green_Fourier}
+  \uses{def:Green_Fourier_transf, def:simple_random_walk}
+  For the simple random walk $\RW = \big(\RW(t)\big)_{t \in \bN}$ on $\bZ^d$,
+  the Fourier transform of the Green's function is
+  \begin{align*}
+  \Freg{r} (\theta) = \frac{1}{1-\frac{r}{d} \sum_{j=1}^d \cos(\theta_j)} .
+  \end{align*}
+\end{lemma}
+\begin{proof}
+\uses{lem:Markovian_Green_Fourier}
+\ldots
+\end{proof}
+
 \section{Inversion of the discrete Fourier transform}
 
 \begin{lemma}
@@ -27,11 +55,12 @@
   \uses{def:Green_Fourier_transf}
   For any $x \in \bZ^d$ and $0 \le r < 1$, we have
   \begin{align*}
-  \Greg{r} (\theta)
-  = \frac{1}{(2\pi)^d} \iint_{\Fbox} e^{-\ii x \cdot \theta} \, \Freg{r} (\theta) \, \ud^d \theta .
+  \Greg{r} (x)
+  = \frac{1}{(2\pi)^d} \iint_{\Fbox} e^{-\ii x \cdot \theta} \, \Freg{r} (\theta) \; \ud^d \theta .
   \end{align*}
 \end{lemma}
 \begin{proof}
+\uses{lem:sum_Green_function}
 \ldots
 \end{proof}
 
@@ -39,7 +68,26 @@ Recall that we are interested in $\EX[L]$, where $L$ is the number of visits to 
 origin by the random walk. Lemma~\ref{lem:Green_function_nonregularized_limit}
 states that $\EX[L]$ is the increasing limit of $\Greg{r}(\vec{0})$ as $r \nearrow 1$,
 and Lemma~\ref{lem:Green_Fourier_inverse} gives a formula for $\Greg{r}(\vec{0})$
-in terms of the Fourier transform.
+as the integral of the Fourier transform: $\Greg{r}(\vec{0}) = \frac{1}{(2\pi)^d} I_r$,
+where
+\begin{align}
+I_r = \iint_{\Fbox} \Freg{r} (\theta) \; \ud^d \theta .
+\end{align}
+
+\begin{corollary}
+  \label{cor:recurrence_iff_finite_limit_integral}
+  \uses{def:expectation_recurrence, def:Green_Fourier_transf}
+  A random walk $\RW = \big(\RW(t)\big)_{t \in \bN}$ on $\bZ^d$
+  is expectation recurrent if and only if $\lim_{r \nearrow 1} \, I_r = +\infty$.
+  In other words, $\RW$ is expectation transient if and only if
+  $\lim_{r \nearrow 1} \, I_r \, < \, +\infty$.
+\end{corollary}
+\begin{proof}
+\uses{lem:Green_Fourier_inverse, lem:Green_function_nonregularized_limit}
+\ldots
+\end{proof}
+
+
 
 % This allows to express the
 % \begin{corollary}
