@@ -1,3 +1,16 @@
 /.lake
 /.devenv
 /.stfolder
+/build
+/lake-packages
+/.cache
+.DS_Store
+/lakefile.olean
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.synctex.gz
+# Lean blueprint
+/blueprint/lean_decls
+/blueprint/src/web.bbl
