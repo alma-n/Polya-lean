@@ -1,5 +1,8 @@
-import Mathlib
+-- import Mathlib
 import Polya.MiscLemmas
+import Mathlib.Order.CompletePartialOrder
+import Mathlib.Analysis.InnerProductSpace.Basic
+import Mathlib.MeasureTheory.Integral.Bochner
 
 open MeasureTheory Topology Filter
 open ENNReal NNReal

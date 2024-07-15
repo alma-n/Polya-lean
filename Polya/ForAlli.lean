@@ -1,7 +1,9 @@
-import Mathlib
-import Mathlib.Tactic
+-- import Mathlib
+-- import Mathlib.Tactic
+-- import Mathlib.MeasureTheory.Integral.Bochner
+import Mathlib.Analysis.Analytic.Composition
+import Mathlib.Analysis.InnerProductSpace.Basic
 import Mathlib.MeasureTheory.Integral.Bochner
-
 
 open MeasureTheory
 open ENNReal
@@ -10,7 +12,7 @@ open BigOperators
 
 noncomputable section
 
-#check ℝ≥0∞
+-- #check ℝ≥0∞
 
 
 -- setup
@@ -31,9 +33,9 @@ def RW (t : ℕ) : Ω → Grid d := ∑ s < t, ξ s
 
 lemma RW.measurable (t : ℕ) : Measurable (RW ξ t) := sorry
 
-#check measurable_add
+-- #check measurable_add
 
-#check (RW ξ 4) ⁻¹' {0}
+-- #check (RW ξ 4) ⁻¹' {0}
 
 /-
 ## Regularized occupation `L_λ`
@@ -47,7 +49,7 @@ lemma regularizedOccupation.measurable (r : ℝ≥0∞) (x : Grid d) :
 def regularizedG (r : ℝ≥0∞) (x : Grid d) : ℝ :=
   ∫ ω, ENNReal.toReal (regularizedOccupation ξ r x ω) ∂P
 
-#check integral_prod
+-- #check integral_prod
 
 lemma tsum_regularizedG_eq_tsum (r : ℝ≥0) (h : r < 1) :
   ∑' x, regularizedG P ξ r x = ∑' t, r ^ t * (∫ ω, ∑' x, Set.indicator ((RW ξ t) ⁻¹' {x}) (Function.const _ (1 : ℝ)) ω ∂P) :=
