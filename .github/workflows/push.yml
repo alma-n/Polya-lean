@@ -80,6 +80,7 @@ jobs:
             pip install pygraphviz --global-option=build_ext --global-option="-L/usr/lib/graphviz/" --global-option="-R/usr/lib/graphviz/"
             pip install leanblueprint
             leanblueprint pdf
+            mkdir docs
             cp blueprint/print/print.pdf docs/blueprint.pdf
             leanblueprint web
             cp -r blueprint/web docs/blueprint
@@ -107,11 +108,6 @@ jobs:
       # - name: Bundle website
       #   working-directory: docs
       #   run: JEKYLL_ENV=production bundle exec jekyll build
-
-      # - name: Upload docs & blueprint artifact to `docs/`
-      #   uses: actions/upload-pages-artifact@v1
-      #   with:
-      #     path: docs/
 
       - name: Upload docs & blueprint artifact to `docs`
         uses: actions/upload-pages-artifact@v1
