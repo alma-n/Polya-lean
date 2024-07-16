@@ -1,14 +1,9 @@
--- import Mathlib
 import Polya.MiscLemmas
 import Mathlib.Order.CompletePartialOrder
 import Mathlib.Analysis.InnerProductSpace.Basic
 import Mathlib.MeasureTheory.Integral.Bochner
 
-open MeasureTheory Topology Filter
-open ENNReal NNReal
-open BigOperators
-
-
+open MeasureTheory Topology Filter ENNReal NNReal BigOperators
 
 section Grid
 
@@ -21,8 +16,6 @@ lemma Grid.countable (d : ℕ) : Countable (Grid d) := by
 
 end Grid
 
-
-
 section WalkOfSteps
 
 variable {d : ℕ}
@@ -32,8 +25,6 @@ def walkOfSteps (steps : (t : ℕ) → Grid d) (t : ℕ) : Grid d :=
   ∑ s in Finset.range t, steps s
 
 end WalkOfSteps
-
-
 
 section RandomWalkOfSteps
 
@@ -53,8 +44,6 @@ lemma RW.measurable {ξ : (t : ℕ) → Ω → Grid d} (ξ_mble : ∀ t, Measura
   sorry
 
 end RandomWalkOfSteps
-
-
 
 noncomputable section RegularizedOccupation
 
@@ -222,8 +211,6 @@ lemma tsum_lintegral_norm_regularizedOccupation_le
   sorry
 
 end RegularizedOccupation
-
-
 
 noncomputable section RegularizedGreensFunction
 

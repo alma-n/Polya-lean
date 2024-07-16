@@ -1,19 +1,12 @@
--- import Mathlib
--- import Mathlib.Tactic
--- import Mathlib.MeasureTheory.Integral.Bochner
 import Mathlib.Analysis.Analytic.Composition
 import Mathlib.Analysis.InnerProductSpace.Basic
 import Mathlib.MeasureTheory.Integral.Bochner
 
-open MeasureTheory
-open ENNReal
-open NNReal
-open BigOperators
+open MeasureTheory ENNReal NNReal BigOperators
 
 noncomputable section
 
 -- #check ℝ≥0∞
-
 
 -- setup
 abbrev Grid d := Fin d → ℤ
