@@ -92,6 +92,7 @@ jobs:
         run: |
           find .lake/build/doc -name "*.trace" -delete
           find .lake/build/doc -name "*.hash" -delete
+          find .lake/build/doc -name "*/header-data.bmp" -delete
 
       - name: Copy documentation to `docs/docs`
         run: |
