@@ -54,9 +54,9 @@ L^{\walk}_r(x) = \sum_{t \in \bN} r^t \, \indOf{\set{\walk(t) = x}}
   \uses{def:walkRegOccup}
   \lean{tsum_walkRegularizedOccupation_eq_geom_series}
   The sum over all points $x \in \bZ^d$ of the $r$-regularized
-  occupations $L^\walk_r(x)$ of a walk $\walk \colon \bN \to \bZ^d$ is
+  occupations $L^{\walk}_r(x)$ of a walk $\walk \colon \bN \to \bZ^d$ is
   \begin{align*}
-  \sum_{x \in \bZ^d} L^\walk_r(x) = \sum_{t \in \bN} r^t .
+  \sum_{x \in \bZ^d} L^{\walk}_r(x) = \sum_{t \in \bN} r^t .
   \end{align*}
   (Both sides above are infinite if $r \ge 1$, but the equality
   nevertheless holds in $[0,+\infty]$.)
@@ -64,7 +64,7 @@ L^{\walk}_r(x) = \sum_{t \in \bN} r^t \, \indOf{\set{\walk(t) = x}}
 \begin{proof}
 Unravel the definitions and interchange the two summations by Fubini's theorem:
 \begin{align*}
-\sum_{x \in \bZ^d} L^\walk_r(x)
+\sum_{x \in \bZ^d} L^{\walk}_r(x)
 = & \; \sum_{x \in \bZ^d} \sum_{t \in \bN} r^t \, \indOf{\set{\walk(t) = x}} \\
 = & \; \sum_{t \in \bN} \underbrace{\sum_{x \in \bZ^d} r^t \, \indOf{\set{\walk(t) = x}}}_{=r^t}.
 \end{align*}
