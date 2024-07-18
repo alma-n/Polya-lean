@@ -6,6 +6,7 @@
 /lakefile.olean
 /lake-packages/*
 .DS_Store
+docs/_includes/sorries.md
 # Lean blueprint
 /blueprint/lean_decls
 blueprint/print/print.log
