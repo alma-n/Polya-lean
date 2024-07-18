@@ -1,11 +1,9 @@
-import Mathlib
+import Mathlib.Order.CompletePartialOrder
+import Mathlib.Analysis.InnerProductSpace.Basic
+import Mathlib.MeasureTheory.Integral.Bochner
 import Polya.MiscLemmas
 
-open MeasureTheory Topology Filter
-open ENNReal NNReal
-open BigOperators
-
-
+open MeasureTheory Topology Filter ENNReal NNReal BigOperators
 
 section Grid
 
