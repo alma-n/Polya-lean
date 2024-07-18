@@ -1,10 +1,12 @@
-import Mathlib
+import Mathlib.Topology.Instances.ENNReal
+import Mathlib.Tactic.DeriveFintype
+
 open Set
 noncomputable section
 
-#check ENNReal
+-- #check ENNReal
 
-#check ENNReal.summable
+-- #check ENNReal.summable
 
 class RandomVariable (α : Type) where
   P (a : α) : ENNReal
