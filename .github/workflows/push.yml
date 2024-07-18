@@ -83,7 +83,7 @@ jobs:
             python3 -m pip install --upgrade pip requests wheel
             python3 -m pip install pygraphviz --global-option=build_ext --global-option="-L/usr/lib/graphviz/" --global-option="-R/usr/lib/graphviz/"
             pip install -r blueprint/requirements.txt
-            python3 -m pip install invoke
+            # python3 -m pip install invoke
             inv all
 
       - name: Copy documentation to `docs/docs`
