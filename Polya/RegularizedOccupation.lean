@@ -218,6 +218,10 @@ lemma tsum_lintegral_norm_regularizedOccupation_le
 -- Some of the earlier tricks apply again.
   sorry
 
+lemma summable_regularizedOccupation_bug : ∀ (ω : Ω), Summable fun i ↦ (regularizedOccupation X r i ω).toNNReal := by
+    intro ω
+    apply Summable.toNNReal
+
 end RegularizedOccupation
 
 
