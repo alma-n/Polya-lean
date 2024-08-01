@@ -14,16 +14,15 @@
 A walk on the grid $\bZ^d$ is a function
 $\walk \colon \bN \to \bZ^d$, denoted $t \mapsto \walk(t)$).
 We construct walks from their sequences of steps as follows:
-  
+
 \begin{definition}
   \label{def:walk}
-  %\lean{deftest}
   \uses{def:grid}
   \leanok
   A sequence $(u_s)_{s \in \bN}$ of steps in $\bZ^d$
   determines a \textbf{walk} $\walk \colon \bN \to \bZ^d$ by
   \begin{align}\label{eq: RW def}
-  \walk(t) = \sum_{0 \le s < t} u_s .
+    \walk(t) = \sum_{0 \le s < t} u_s .
   \end{align}
 \end{definition}
 
@@ -44,18 +43,20 @@ A random walk is constructed from a sequence of random steps.
   \label{lem:RW_mble}
   \uses{def:random_walk}
   \lean{RW.measurable}
+  \leanok
   The position $\RW(t)$ of a
   random walk $\RW = \big(\RW(t)\big)_{t \in \bN}$
   at any time $t \in \bN$ is a $\bZ^d$-valued random variable.
 \end{lemma}
 \begin{proof}
-We must prove that $\RW(t) \colon \Omega \to \bZ^d$ is measurable.
-Since each of the steps $\xi_s \colon \Omega \to \bZ^d$ is measurable by
-assumption and the position of the
-random walk is defined in~\eqref{eq: RW def} by summing the
-first $t$ steps, the measurability follows by induction
-on $t$ using the fact that sums of measurable $\bZ^d$-valued
-functions are measurable.
+  \leanok
+  We must prove that $\RW(t) \colon \Omega \to \bZ^d$ is measurable.
+  Since each of the steps $\xi_s \colon \Omega \to \bZ^d$ is measurable by
+  assumption and the position of the
+  random walk is defined in~\eqref{eq: RW def} by summing the
+  first $t$ steps, the measurability follows by induction
+  on $t$ using the fact that sums of measurable $\bZ^d$-valued
+  functions are measurable.
 \end{proof}
 
 \begin{definition}
@@ -74,9 +75,9 @@ functions are measurable.
   is \textbf{simple} if it is time-homogeneous Markovian and its
   steps are uniformly distributed on nearest neighbors on the grid:
   \begin{align*}
-  \PR \big[ \RW(t+1) - \RW(t) = u \big] = \begin{cases}
-        \frac{1}{2d}  & \text{ if } \|u\| = 1 \\
-        0             & \text{ otherwise.}
-    \end{cases}
+    \PR \big[ \RW(t+1) - \RW(t) = u \big] = \begin{cases}
+                                              \frac{1}{2d} & \text{ if } \|u\| = 1 \\
+                                              0            & \text{ otherwise.}
+                                            \end{cases}
   \end{align*}
 \end{definition}
