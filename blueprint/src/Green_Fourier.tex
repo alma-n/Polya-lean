@@ -2,9 +2,28 @@
 
 \section{Fourier transform of the regularized Green's function}
 
+\begin{lemma}
+  \label{lem:regularized_Green_square_summable}
+  \uses{def:Green_function}
+  \lean{Gl2}
+  \leanok % for the 1-dimensional case only
+  For $0 \le r < 1$,
+  the regularized Green's function $\Greg{r} \colon \bZ^d \to \bR$ is
+  an element of the Hilbert space $\ell^2(\bZ^d, \bC)$ of complex-valued
+  square-summable functions on $\bZ^d$.
+\end{lemma}
+\begin{proof}
+  \uses{lem:sum_Green_function}
+  Since $\ell^1(\bZ^d, \bC) \subset \ell^2(\bZ^d, \bC)$, it suffices to show
+  that $\Greg{r}$ is absolutely summable.
+  This follows from Lemma~\ref{lem:sum_Green_function}.
+\end{proof}
+
 \begin{definition}
   \label{def:Green_Fourier_transf}
-  \uses{def:Green_function}
+  \uses{def:Green_function, lem:regularized_Green_square_summable}
+  \lean{Ghat}
+  \leanok % for the 1-dimensional case only
   Let $0 \le r < 1$.
   The \textbf{Fourier transform} of the regularized Green's function
   $\Greg{r} \, \colon \, \bZ^d \to \R$
@@ -53,6 +72,8 @@
 \begin{lemma}
   \label{lem:Green_Fourier_inverse}
   \uses{def:Green_Fourier_transf}
+  \lean{G_eq_integral_Ghat}
+  \leanok % for the 1-dimensional case only
   For any $x \in \bZ^d$ and $0 \le r < 1$, we have
   \begin{align*}
   \Greg{r} (x)
