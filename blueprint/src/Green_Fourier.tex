@@ -5,7 +5,7 @@
 \begin{lemma}
   \label{lem:regularized_Green_square_summable}
   \uses{def:Green_function}
-  \lean{Gl2}
+  \lean{regularizedG.l2}
   \leanok % for the 1-dimensional case only
   For $0 \le r < 1$,
   the regularized Green's function $\Greg{r} \colon \bZ^d \to \bR$ is
@@ -22,7 +22,7 @@
 \begin{definition}
   \label{def:Green_Fourier_transf}
   \uses{def:Green_function, lem:regularized_Green_square_summable}
-  \lean{Ghat}
+  \lean{regularizedG₁.hat}
   \leanok % for the 1-dimensional case only
   Let $0 \le r < 1$.
   The \textbf{Fourier transform} of the regularized Green's function
@@ -72,7 +72,7 @@
 \begin{lemma}
   \label{lem:Green_Fourier_inverse}
   \uses{def:Green_Fourier_transf}
-  \lean{G_eq_integral_Ghat}
+  \lean{regularizedG_eq_integral_regularizedG₁hat}
   \leanok % for the 1-dimensional case only
   For any $x \in \bZ^d$ and $0 \le r < 1$, we have
   \begin{align*}
