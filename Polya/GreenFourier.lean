@@ -144,8 +144,39 @@ Fourier inverse transform) of its Fourier transform. -/
 lemma regularizedG_eq_integral_regularizedG₁hat (r : ℝ≥0) (x : Grid 1) :
     regularizedG P X₁ r x
       = (2*π)⁻¹ * ∫ (θ : ℝ) in (-π)..π,
-          (fourier (T := 2*π) (-(Grid₁.toZ n))) θ • (regularizedG₁.hat P X₁ r θ) := by
+          (fourier (T := 2*π) (-(Grid₁.toZ x))) θ • (regularizedG₁.hat P X₁ r θ) := by
   -- hopefully `fourierCoeff_eq_intervalIntegral` and some simplifications
   sorry
+
+#check Complex.re
+
+#check ContinuousLinearMap.integral_comp_comm
+
+#check Complex.reCLM
+#check Complex.reCLM_apply
+
+-- This continuity should be true, but there is a bit of abuse since it relies
+-- on a particular representative from the equivalence class of almost everywhere
+-- equal functions (equality in `L²(AddCircle)`).
+-- If this is a problem, then we should prove that `regularizedG₁.hat P X₁ r` is
+-- a.e. equal (`=ᵐ[AddCircle.haarAddCircle]`) to the right continuous function.
+lemma continuous_regularizedG₁hat (r : ℝ≥0) :
+    Continuous (fun θ ↦ regularizedG₁.hat P X₁ r θ) := by
+  sorry
+
+/-- The (in dimension 1) regularized Green's function is given by an explicit real integral. -/
+lemma regularizedG_eq_real_integral_regularizedG₁hat (r : ℝ≥0) (x : Grid 1) :
+    regularizedG P X₁ r x
+      = (2*π)⁻¹ * ∫ (θ : ℝ) in (-π)..π,
+          ((fourier (T := 2*π) (-(Grid₁.toZ x))) θ • (regularizedG₁.hat P X₁ r θ)).re := by
+  convert congr_arg Complex.re <| regularizedG_eq_integral_regularizedG₁hat P X₁ r x
+  rw [Complex.re_ofReal_mul]
+  congr
+  simp_rw [← Complex.reCLM_apply]
+  rw [ContinuousLinearMap.intervalIntegral_comp_comm]
+  apply Continuous.intervalIntegrable (Continuous.mul ?_ ?_)
+  · continuity
+  · apply Continuous.comp (continuous_regularizedG₁hat P X₁ r)
+    exact { isOpen_preimage := fun s a ↦ a }
 
 end Actual_regularized_Green_function_and_its_Fourier_transform

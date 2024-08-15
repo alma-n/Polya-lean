@@ -81,8 +81,26 @@
   \end{align*}
 \end{lemma}
 \begin{proof}
-\uses{lem:sum_Green_function}
 \ldots
+\end{proof}
+
+\begin{lemma}
+  \label{lem:Green_Fourier_inverse_real}
+  \uses{def:Green_Fourier_transf}
+  \lean{regularizedG_eq_real_integral_regularizedG₁hat}
+  \leanok % for the 1-dimensional case only
+  For any $x \in \bZ^d$ and $0 \le r < 1$, we have
+  \begin{align*}
+  \Greg{r} (x)
+  = \frac{1}{(2\pi)^d} \iint_{\Fbox} \re \Big( e^{-\ii x \cdot \theta} \, \Freg{r} (\theta) \Big) \; \ud^d \theta .
+  \end{align*}
+\end{lemma}
+\begin{proof}
+  \uses{lem:Green_Fourier_inverse}
+  \leanok % for the 1-dimensional case only
+  The integral of the real part is the real part of the integral
+  so this is obvious from Lemma~\ref{lem:Green_Fourier_inverse}~---
+  the left hand side is real to start with, so equal to its own real part.
 \end{proof}
 
 Recall that we are interested in $\EX[L]$, where $L$ is the number of visits to the
@@ -104,7 +122,7 @@ I_r = \iint_{\Fbox} \Freg{r} (\theta) \; \ud^d \theta .
   $\lim_{r \nearrow 1} \, I_r \, < \, +\infty$.
 \end{corollary}
 \begin{proof}
-\uses{lem:Green_Fourier_inverse, lem:Green_function_nonregularized_limit}
+\uses{lem:Green_Fourier_inverse_real, lem:Green_function_nonregularized_limit}
 \ldots
 \end{proof}
 
