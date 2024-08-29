@@ -113,7 +113,27 @@ We can now rephrase the recurrence criterion in terms of only the low frequency 
 \end{proof}
 
 
-\section{Characterizing finiteness of the integral}
+\section{Characterizing finiteness of the integral for simple random walk}
+
+\begin{lemma}
+  \label{lem:SRW_low_frequency_approximation}
+  \uses{def:frequency_decomposition}
+  For the simple random walk $\RW = \big(\RW(t)\big)_{t \in \bN}$ on $\bZ^d$,
+  there exists a small $\delta_0 > 0$
+  (something like $\delta_0 = \frac{\pi}{8}$) such that
+  for all $\theta \in B_{\delta_0} \setminus \set{0}$
+  we have $\re \big( \Freg{r}(\theta) \big) \uparrow \re \big( \Freg{1}(\theta) \big)$
+  as $r \uparrow 1$ and
+  \begin{align*}
+  \re \big( \Freg{1}(\theta) \big) \asymp \frac{1}{\| \theta \|^{2}} .
+  \end{align*}
+\end{lemma}
+\begin{proof}
+\uses{lem:SRW_Green_Fourier, lem:low_frequency_integral}
+Positivity estimates and Taylor series approximation of the Fourier
+transform of the Green's function given explicitly in
+Lemma~\ref{lem:SRW_Green_Fourier}. \ldots
+\end{proof}
 
 \begin{lemma}
   \label{lem:SRW_low_frequency_convergence}
@@ -124,8 +144,24 @@ We can now rephrase the recurrence criterion in terms of only the low frequency 
   for $\delta > 0$ small enough.
 \end{lemma}
 \begin{proof}
-\uses{lem:SRW_Green_Fourier, lem:low_frequency_integral}
-\ldots
+\uses{lem:SRW_low_frequency_approximation}
+By the increasing limit part of
+Lemma~\ref{lem:SRW_low_frequency_approximation} and
+monotone convergence theorem, we have
+\begin{align*}
+K_r^{(\delta)} \uparrow K_1^{(\delta)}
+  = \iint_{B_\delta} \re \big( \Freg{1} (\theta) \big) \; \ud^d \theta .
+\end{align*}
+By the second part of Lemma~\ref{lem:SRW_low_frequency_approximation},
+$\re \big( \Freg{1}(\theta) \big) \ge C_1 \| \theta \|^{-2}$ (for some positive constant $C_1$),
+so using this lower bound in integration and switching to radial
+coordinates, we have
+\begin{align*}
+  K_1^{(\delta)}
+  \; \ge \; \iint_{B_\delta} \frac{C_1}{\|\theta\|^2} \; \ud^d \theta
+  \; = \; C_1 \, A_d \int_{0}^{\delta} \rho^{d-3} \; \ud \rho
+  \; = \;  + \infty .
+\end{align*}
 \end{proof}
 
 \begin{lemma}
@@ -137,6 +173,22 @@ We can now rephrase the recurrence criterion in terms of only the low frequency 
   for any $\delta > 0$ small.
 \end{lemma}
 \begin{proof}
-\uses{lem:SRW_Green_Fourier, lem:low_frequency_integral}
-\ldots
+  \uses{lem:SRW_low_frequency_approximation}
+  By the increasing limit part of
+  Lemma~\ref{lem:SRW_low_frequency_approximation} and
+  monotone convergence theorem, we have
+  \begin{align*}
+  K_r^{(\delta)} \uparrow K_1^{(\delta)}
+    = \iint_{B_\delta} \re \big( \Freg{1} (\theta) \big) \; \ud^d \theta .
+  \end{align*}
+  By the second part of Lemma~\ref{lem:SRW_low_frequency_approximation},
+  $\re \big( \Freg{1}(\theta) \big) \le C_2 \| \theta \|^{-2}$ (for some positive constant $C_2$),
+  so using this upper bound in integration and switching to radial
+  coordinates, we have
+  \begin{align*}
+    K_1^{(\delta)}
+    \; \le \; \iint_{B_\delta} \frac{C_2}{\|\theta\|^2} \; \ud^d \theta
+    \; = \; C_2 \, A_d \int_{0}^{\delta} \rho^{d-3} \; \ud \rho
+    \; < \;  + \infty .
+  \end{align*}
 \end{proof}
