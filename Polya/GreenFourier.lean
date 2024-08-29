@@ -179,4 +179,22 @@ lemma regularizedG_eq_real_integral_regularizedG₁hat (r : ℝ≥0) (x : Grid 1
   · apply Continuous.comp (continuous_regularizedG₁hat P X₁ r)
     exact { isOpen_preimage := fun s a ↦ a }
 
+/-- The main integral, which is proportional to the Green's function at the
+origin (and whose finiteness in the `r ↑ 1` limit characterizes transience). -/
+noncomputable def mainIntegral (r : ℝ≥0) :=
+  ∫ (θ : ℝ) in Set.Ioc (-π) π, (regularizedG₁.hat P X₁ r θ).re
+
+/-- The easy "high frequency" part of the main integral. -/
+noncomputable def highFreqIntegral (r : ℝ≥0) (δ : ℝ≥0) :=
+  ∫ (θ : ℝ) in (Set.Ioc (-π) π) \ Metric.ball 0 δ, (regularizedG₁.hat P X₁ r θ).re
+
+/-- The interesting "low frequency" part of the main integral. -/
+noncomputable def lowFreqIntegral (r : ℝ≥0) (δ : ℝ≥0) :=
+  ∫ (θ : ℝ) in Metric.ball 0 δ, (regularizedG₁.hat P X₁ r θ).re
+
+/-- The decomposition of the main integral to high and low frequency parts. -/
+lemma mainIntegral_eq_add {r δ : ℝ≥0} (r_lt_one : r < 1) (hδ : δ ≤ π) :
+    mainIntegral P X₁ r = highFreqIntegral P X₁ r δ + lowFreqIntegral P X₁ r δ := by
+  sorry
+
 end Actual_regularized_Green_function_and_its_Fourier_transform

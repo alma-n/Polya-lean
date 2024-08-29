@@ -2,7 +2,7 @@
 
 In this part, we analyze the integral
 \begin{align}
-I_r = \iint_{\Fbox} \Freg{r} (\theta) \; \ud^d \theta ,
+I_r = \iint_{\Fbox} \re \big( \Freg{r} (\theta) \big) \; \ud^d \theta ,
 \end{align}
 where $\Freg{r} \colon \bR^d \to \bC$ is the Fourier transform of the
 regularized Green's function of a random walk $\RW$ on $\bZ^d$. By
@@ -12,20 +12,40 @@ transience of $\RW$.
 
 \section{Decomposition of the integral}
 
-\begin{lemma}
-  \label{lem:integral_decomposition}
-  \uses{def:Green_Fourier_transf, lem:Green_Fourier_inverse_real}
-  For any $0 < \delta \le \pi$ we can write
-  \begin{align*}
-  I_r = J_r^{(\delta)} + K_r^{(\delta)},
-  \end{align*}
-  where the two parts are
+The main integral $I_r$ can be decomposed into two parts:
+an easy "high frequency part", which contains the contributions of
+$\theta$ away from $0$, and a more interesting "low frequency part",
+which contains the contributions of $\theta$ near $0$.
+
+\begin{definition}[]
+  \label{def:frequency_decomposition}
+  \uses{def:Green_Fourier_transf}
+  \lean{lowFreqIntegral, highFreqIntegral}
+  % \leanok
+  For any $\delta > 0$, define the integrals
   \begin{align}
-  J_r^{(\delta)} = \; & \iint_{\Fbox \setminus B_\delta} \Freg{r} (\theta) \; \ud^d \theta \\
-  K_r^{(\delta)} = \; & \iint_{B_\delta} \Freg{r} (\theta) \; \ud^d \theta ,
+  J_r^{(\delta)} = \; & \iint_{\Fbox \setminus B_\delta} \re \big( \Freg{r} (\theta) \big) \; \ud^d \theta \\
+  K_r^{(\delta)} = \; & \iint_{B_\delta} \re \big( \Freg{r} (\theta) \big) \; \ud^d \theta ,
   \end{align}
   where $B_\delta := \set{ \theta \in \bR^d \, \big| \, \|\theta\| < \delta}$ is the
   ball of radius $\delta$ centered at $\vec{0} \in \bR^d$.
+\end{definition}
+
+\begin{lemma}
+  \label{lem:integral_decomposition}
+  \uses{def:decomposition} % , lem:Green_Fourier_inverse_real
+  \lean{mainIntegral_eq_add}
+  For any $0 < \delta \le \pi$ we can write
+  \begin{align*}
+  I_r = J_r^{(\delta)} + K_r^{(\delta)} .
+  \end{align*}
+  % where the two parts are
+  % \begin{align}
+  % J_r^{(\delta)} = \; & \iint_{\Fbox \setminus B_\delta} \re \big( \Freg{r} (\theta) \big) \; \ud^d \theta \\
+  % K_r^{(\delta)} = \; & \iint_{B_\delta} \re \big( \Freg{r} (\theta) \big) \; \ud^d \theta ,
+  % \end{align}
+  % where $B_\delta := \set{ \theta \in \bR^d \, \big| \, \|\theta\| < \delta}$ is the
+  % ball of radius $\delta$ centered at $\vec{0} \in \bR^d$.
 \end{lemma}
 \begin{proof}
 Obvious, since $\Fbox = (\Fbox \setminus B_\delta) \cup B_\delta$
@@ -38,8 +58,8 @@ is a disjoint union.
 TODO: Define non-degenerate step distribution (essentially $\sum_{u\in \bZ^d} p(u) e^{\ii u \cdot \theta} \ne 1$ for $\theta \ne 0$ modulo periodicity).
 
 \begin{lemma}
-  \label{lem:integral_away}
-  \uses{lem:integral_decomposition}
+  \label{lem:high_frequency_integral}
+  \uses{def:frequency_decomposition}
   If $\RW$ is a time-homogeneous Markovian random walk with suitable
   non-degeneracy conditions on its step distribution (to be written down more precisely),
   then for any $0 < \delta \le \pi$ the limit
@@ -62,8 +82,8 @@ that $\lim_{r \nearrow 1} J_r^{(\delta)} = J_1^{(\delta)} \in \bR$.
 TODO: Think about the best conditions for step distribution under which monotone convergence can be applied (real-valuedness requires symmetricity of the step-distribution?!?).
 
 \begin{lemma}
-  \label{lem:integral_near}
-  \uses{lem:integral_decomposition}
+  \label{lem:low_frequency_integral}
+  \uses{def:frequency_decomposition}
   If $\RW$ is a time-homogeneous Markovian random walk with suitable
   symmetricity and integrability conditions on its step distribution (to be written down more precisely),
   then there exists a $\delta_0 > 0$ such that for any $0 < \delta \le \delta_0$, the limit
@@ -76,5 +96,47 @@ TODO: Think about the best conditions for step distribution under which monotone
 \ldots
 \end{proof}
 
+We can now rephrase the recurrence criterion in terms of only the low frequency integral.
+
+\begin{lemma}
+  \label{lem:recurrence_iff_finite_low_frequency}
+  \uses{def:expectation_recurrence, def:Green_Fourier_transf, def:frequency_decomposition}
+  A nice random walk $\RW = \big(\RW(t)\big)_{t \in \bN}$ on $\bZ^d$
+  is expectation recurrent if and only if for any small $\delta>0$
+  $\lim_{r \nearrow 1} \, K_r^{(\delta)} = +\infty$.
+  In other words, $\RW$ is expectation transient if and only if
+  for some small $\delta>0$ we have $\lim_{r \nearrow 1} \, K_r^{(\delta)} \, < \, +\infty$.
+\end{lemma}
+\begin{proof}
+\uses{cor:recurrence_iff_finite_limit_integral, lem:high_frequency_integral}
+\ldots
+\end{proof}
+
 
 \section{Characterizing finiteness of the integral}
+
+\begin{lemma}
+  \label{lem:SRW_low_frequency_convergence}
+  \uses{def:frequency_decomposition}
+  For the simple random walk $\RW = \big(\RW(t)\big)_{t \in \bN}$ on $\bZ^d$
+  with $d > 2$,
+  we have $\lim_{r \nearrow 1} \, K_r^{(\delta)} \, < \, +\infty$
+  for $\delta > 0$ small enough.
+\end{lemma}
+\begin{proof}
+\uses{lem:SRW_Green_Fourier, lem:low_frequency_integral}
+\ldots
+\end{proof}
+
+\begin{lemma}
+  \label{lem:SRW_low_frequency_divergence}
+  \uses{def:frequency_decomposition}
+  For the simple random walk $\RW = \big(\RW(t)\big)_{t \in \bN}$ on $\bZ^d$
+  with $d \le 2$,
+  we have $\lim_{r \nearrow 1} \, K_r^{(\delta)} \, = \, +\infty$
+  for any $\delta > 0$ small.
+\end{lemma}
+\begin{proof}
+\uses{lem:SRW_Green_Fourier, lem:low_frequency_integral}
+\ldots
+\end{proof}

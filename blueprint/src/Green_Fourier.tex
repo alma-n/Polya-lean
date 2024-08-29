@@ -106,11 +106,11 @@
 Recall that we are interested in $\EX[L]$, where $L$ is the number of visits to the
 origin by the random walk. Lemma~\ref{lem:Green_function_nonregularized_limit}
 states that $\EX[L]$ is the increasing limit of $\Greg{r}(\vec{0})$ as $r \nearrow 1$,
-and Lemma~\ref{lem:Green_Fourier_inverse} gives a formula for $\Greg{r}(\vec{0})$
-as the integral of the Fourier transform: $\Greg{r}(\vec{0}) = \frac{1}{(2\pi)^d} I_r$,
-where
+and Lemma~\ref{lem:Green_Fourier_inverse_real} gives a formula for $\Greg{r}(\vec{0})$
+as the integral of the real part of the Fourier transform:
+$\Greg{r}(\vec{0}) = \frac{1}{(2\pi)^d} I_r$, where
 \begin{align}
-I_r = \iint_{\Fbox} \Freg{r} (\theta) \; \ud^d \theta .
+I_r = \iint_{\Fbox} \re \big( \Freg{r} (\theta) \big) \; \ud^d \theta .
 \end{align}
 
 \begin{corollary}

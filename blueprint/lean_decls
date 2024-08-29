@@ -16,3 +16,10 @@ tsum_lintegral_norm_regularizedOccupation_le
 regularizedG
 tsum_regularizedG_eq_lintegral_tsum
 tsum_regularizedG_eq
+regularizedG.l2
+regularizedG₁.hat
+regularizedG_eq_integral_regularizedG₁hat
+regularizedG_eq_real_integral_regularizedG₁hat
+lowFreqIntegral
+highFreqIntegral
+mainIntegral_eq_add
