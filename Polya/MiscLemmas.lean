@@ -7,10 +7,6 @@ open ENNReal NNReal
 
 section Auxiliary
 
--- This `@[simp]`lemma should be soon added to Mathlib (there is a PR including this already).
-@[simp] lemma ENNReal.toNNReal_toReal_eq (z : ℝ≥0∞) : z.toReal.toNNReal = z.toNNReal := by
-  ext; simp only [Real.coe_toNNReal', ge_iff_le, toReal_nonneg, max_eq_left]; rfl
-
 /-- The (topological) sum of `ℝ≥0∞` valued functions evaluated at a point is the (topological)
 sum of the evaluations of those functions.  -/
 lemma tsum_pi_ennreal_apply {ι α : Type*} (fs : ι → α → ℝ≥0∞) (a : α) :

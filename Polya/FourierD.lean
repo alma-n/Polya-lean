@@ -120,7 +120,7 @@ instance : IsProbabilityMeasure (haarAddTorus (Ts := Ts)) :=
 
 /-- The canonical map fun from `ℝᵈ / ℤᵈ ⬝ Ts` to the standard multiplicative
 torus (product of unit circles in ℂ). -/
-def toTorus (x : AddTorus Ts) : ∀ (_ : ι), circle  := fun i ↦ AddCircle.toCircle (x i)
+def toTorus (x : AddTorus Ts) : ∀ (_ : ι), Circle  := fun i ↦ AddCircle.toCircle (x i)
 
 end AddTorus
 
@@ -129,7 +129,7 @@ open AddTorus
 section Monomials
 
 variable {ι : Type u} {Ts : ι → ℝ}
-variable [hTs : ∀ i, Fact (0 < Ts i)]
+-- variable [hTs : ∀ i, Fact (0 < Ts i)]
 
 /-- The family of exponential monomials `fun x => exp (2 π i n ⬝ x / Ts)`, parametrized by `n : ℤ` and
 considered as bundled continuous maps from `ℝ / ℤ • T` to `ℂ`. -/
@@ -143,11 +143,15 @@ def fourierD [Fintype ι] (ns : ι → ℤ) : C(AddTorus Ts, ℂ) where
 lemma fourierD_apply [Fintype ι] {ns : ι → ℤ} {x : AddTorus Ts} :
     fourierD ns x = ∏ (i : ι), AddCircle.toCircle ((ns i) • (AddTorus.proj (Ts := Ts) i x)) := by
   simp [fourierD]
+  rw [← @SubmonoidClass.coe_finset_prod]
 
 @[simp] lemma fourierD_coe_apply [Fintype ι] {ns : ι → ℤ} {xs : ι → ℝ} :
     fourierD ns (AddTorus.mk Ts xs)
       = Complex.exp (∑ i, 2 * π * Complex.I * (ns i) * (xs i) / (Ts i)) := by
-  simp [fourierD_apply, AddTorus.mk, Complex.exp_sum]
+  simp [fourierD_apply, Complex.exp_sum]
+  rw [@SubmonoidClass.coe_finset_prod]
+  simp only [fourier_coe_apply']
+
 
 -- -- Q: Do we want `SMul (ι → ℤ) (AddTorus Ts)` for this to typecheck?
 --@[simp]
