@@ -1,23 +1,22 @@
 import Mathlib.Analysis.Normed.Field.Basic
-import Mathlib.MeasureTheory.Constructions.Prod.Basic
+-- import Mathlib.MeasureTheory.MeasurableSpace.Defs
+import Mathlib.MeasureTheory.Measure.Prod
 
 open ENNReal NNReal
 
-
-
 section Auxiliary
 
-/-- The (topological) sum of `ℝ≥0∞` valued functions evaluated at a point is the (topological)
-sum of the evaluations of those functions.  -/
+-- /-- The (topological) sum of `ℝ≥0∞` valued functions evaluated at a point is the (topological)
+-- sum of the evaluations of those functions.  -/
 lemma tsum_pi_ennreal_apply {ι α : Type*} (fs : ι → α → ℝ≥0∞) (a : α) :
     (∑' i, fs i) a = ∑' i, fs i a := by
--- Remark by Kalle: It is mildly annoying that one sometimes needs to invoke this triviality
--- explicitly. Maybe we could make it a local `@[simp]` lemma (include in our own `simp` set).
--- I forgot how to do that exactly. Temporarily just marking this lemma with a `@[simp]` tag
--- might (or might not) reduce pain below... Feel free to do that or try to make this more
--- automatic in other ways!
--- The proof needs `tendsto_pi_nhds`, which is the convenient characterization of convergence
--- in the topology of pointwise convergence (product topology, hence the "pi").
+-- -- Remark by Kalle: It is mildly annoying that one sometimes needs to invoke this triviality
+-- -- explicitly. Maybe we could make it a local `@[simp]` lemma (include in our own `simp` set).
+-- -- I forgot how to do that exactly. Temporarily just marking this lemma with a `@[simp]` tag
+-- -- might (or might not) reduce pain below... Feel free to do that or try to make this more
+-- -- automatic in other ways!
+-- -- The proof needs `tendsto_pi_nhds`, which is the convenient characterization of convergence
+-- -- in the topology of pointwise convergence (product topology, hence the "pi").
   exact ENNReal.tsum_apply
 
 -- Kalle says: This should definitely be in Mathlib...
