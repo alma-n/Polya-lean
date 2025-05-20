@@ -590,14 +590,6 @@ variable {d : ℕ}
 def regularizedG (X : (t : ℕ) → Ω → Grid d) (r : ℝ≥0∞) (x : Grid d) : ℝ :=
   ∫ ω, ENNReal.toReal (regularizedOccupation X r x ω) ∂P
 
-lemma lemma1 {X : (t : ℕ) → Ω → Grid d}
-    {r : ℝ≥0}
-    (r_lt_one : r < 1)
-    (X_mble : ∀ t, Measurable (X t))
-    : ∫ ω, ∑' x, ENNReal.toReal (regularizedOccupation X r x ω) ∂P =
-      ∫ ω, ENNReal.toReal (∑' t, r^t * ∑' x, Set.indicator {x} (fun _ => 1) (X t ω)) ∂P := by
-      sorry
-
 /-- An auxiliary step: one can interchange a sum and expected value for `regularizedG` summed over
 all grid points. -/
 lemma tsum_regularizedG_eq_lintegral_tsum {X : (t : ℕ) → Ω → Grid d}
@@ -607,8 +599,117 @@ lemma tsum_regularizedG_eq_lintegral_tsum {X : (t : ℕ) → Ω → Grid d}
     ∑' x, regularizedG P X r x
       = (∫ ω, ∑' x, ∑' t,
     Set.indicator ((X t) ⁻¹' {x}) (fun _ ↦ (r : ℝ) ^ t) ω ∂P) := by
-    sorry
 
+  simp_rw [regularizedG, Set.indicator, regularizedOccupation, walkRegularizedOccupation, Set.indicator]
+  rw [integral_tsum]
+  -- simp_rw [Set.mem_singleton_iff]
+  -- have (x) (ω) : ∀ (a : ℕ), (if X a ω = x then (↑r : ℝ≥0∞) ^ a else 0) ≠ ∞ := by
+  conv =>
+    enter [1, 1, x, 2, ω]
+    rw [ENNReal.tsum_toReal_eq (by
+      intro a
+      by_cases h : X a ω = x
+      · simp [h]
+      · simp [h]
+    )]
+    simp [apply_ite]
+  simp only [Set.mem_preimage, Set.mem_singleton_iff]
+  · intro x
+    apply Measurable.aestronglyMeasurable
+
+    have h1 : Measurable $ fun (ω : Ω) ↦ ∑' (t : ℕ), Set.indicator ((X t) ⁻¹' {x}) (fun _ ↦ (r : ℝ≥0∞) ^ t) ω := by
+      apply regularizedOccupation.measurable X_mble
+
+    have := Measurable.coe_nnreal_real (Measurable.ennreal_toNNReal h1)
+    convert this
+    rename_i ω
+
+    rw [ENNReal.tsum_toNNReal_eq (by
+      intro n
+      rw [Set.indicator]
+      by_cases h : ω ∈ X n ⁻¹' {x}
+      · simp [h]
+      · simp [h]
+    )]
+    simp_rw [NNReal.coe_tsum, Set.indicator, apply_ite, Set.mem_preimage, toNNReal_pow, toNNReal_coe, NNReal.coe_pow,
+      zero_toNNReal, NNReal.coe_zero]
+  · rw [← lintegral_tsum]
+    · apply LT.lt.ne
+      sorry
+      -- conv =>
+      --   arg 1
+      --   arg 2
+      --   intro ω
+
+        -- rw [← ENNReal.coe_tsum (by
+        -- apply Summable.toNNReal
+        -- apply ENNReal.summable_toReal
+        -- apply LT.lt.ne
+        -- rw [← tsum_apply, tsum_regularizedOccupation_eq_geom_series, tsum_geometric]
+        -- simp
+        -- exact rge1
+        -- · rw [Pi.summable]
+        --   intro o
+        --   exact ENNReal.summable
+        -- )]
+        -- simp_rw [← tsum_apply]
+
+      -- have gona (i) :  ∑' (t : ℕ), (Set.singleton i).indicator (fun _x ↦ (↑r : ℝ) ^ t) (X t) ≤ ∑' (t : ℕ), (fun _x ↦ (↑r : ℝ) ^ t) (X t) := by
+      --   apply tsum_le_tsum
+      --   intro n
+      --   rw [Set.indicator]
+      --   by_cases h : X n ∈ Set.singleton i
+      --   simp [h]
+      --   simp [h]
+      --   sorry
+      --   sorry
+
+      -- sorry
+    · intro x
+      · apply Measurable.aemeasurable
+        apply Measurable.coe_nnreal_ennreal
+        -- apply Measurable.coe_nnreal_real
+
+        simp_rw [Set.mem_preimage, ← measurable_coe_nnreal_real_iff,
+          coe_nnnorm, Real.norm_eq_abs]
+        apply Measurable.sup
+        have h1 : Measurable $ fun (ω : Ω) ↦ ∑' (t : ℕ), Set.indicator ((X t) ⁻¹' {x}) (fun _ ↦ (r : ℝ≥0∞) ^ t) ω := by {
+          apply regularizedOccupation.measurable X_mble
+        }
+
+        have := Measurable.coe_nnreal_real (Measurable.ennreal_toNNReal h1)
+        convert this
+        rename_i ω
+
+        rw [ENNReal.tsum_toNNReal_eq (by
+        intro n
+        rw [Set.indicator]
+        by_cases h : ω ∈ X n ⁻¹' {x}
+        · simp [h]
+        · simp [h]
+      )]
+        simp_rw [NNReal.coe_tsum, Set.indicator, apply_ite, Set.mem_preimage, toNNReal_pow, toNNReal_coe, NNReal.coe_pow,
+        zero_toNNReal, NNReal.coe_zero]
+        · simp
+          -- apply Measurable.coe_nnreal_real
+          have h1 : Measurable $ fun (ω : Ω) ↦ ∑' (t : ℕ), Set.indicator ((X t) ⁻¹' {x}) (fun _ ↦ (r : ℝ≥0∞) ^ t) ω := by {
+            apply regularizedOccupation.measurable X_mble
+          }
+
+          have := Measurable.coe_nnreal_real (Measurable.ennreal_toNNReal h1)
+          convert this
+          rename_i ω
+
+          rw [ENNReal.tsum_toNNReal_eq (by
+          intro n
+          rw [Set.indicator]
+          by_cases h : ω ∈ X n ⁻¹' {x}
+          · simp [h]
+          · simp [h]
+        )]
+          simp_rw [NNReal.coe_tsum, Set.indicator, apply_ite, Set.mem_preimage, toNNReal_pow, toNNReal_coe, NNReal.coe_pow,
+          zero_toNNReal, NNReal.coe_zero]
+          rfl
 
 -- Very ugly proof, lots to improve about it, but I do not have the energy at the moment
 
@@ -637,7 +738,6 @@ lemma tsum_regularizedG_eq_lintegral_tsum' {X : (t : ℕ) → Ω → Grid d}
 -- tsum_lintegral_norm_regularizedOccupation_le
   sorry
 
-#check summable_of_abs_le_of_tsum_ne_top
 
 /-- A summability criterion for a slightly generalized version of walk occupations. -/
 lemma summable_weighted_occupation {walk : (t : ℕ) → Grid d}
@@ -657,13 +757,13 @@ lemma summable_weighted_occupation {walk : (t : ℕ) → Grid d}
 
     sorry
 
-
 -- Kalle says: Probably the cleanest way to do this would be to generalize this further.
 -- But for now, this seems ok. If you like, thinking about the right generalization can
 -- nevertheless be very useful!
 -- At least the general helper lemma `summable_of_abs_le_of_tsum_ne_top` can be used here.
 -- The earlier tricks (Fubini variants and juggling between sums and integrals w.r.t
 -- counting measures) can also come in handy.
+  sorry
 
 /-- A summability criterion for (basically) regularized walk occupations. -/
 lemma summable_regularized_occupation {walk : (t : ℕ) → Grid d} {r : ℝ≥0} (r_lt_one : r < 1) :
