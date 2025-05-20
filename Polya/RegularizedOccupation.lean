@@ -38,10 +38,12 @@ variable {Ω : Type*} [MeasurableSpace Ω] (P : Measure Ω) [IsProbabilityMeasur
 variable {d : ℕ}
 
 /-- Random walk with a given random step sequence `ξ`. -/
+-- At time `t`, the random walk `RW ξ t` is a random variable (`Ω →`) of `Grid d`.
+-- TODO: Ask Kalle: By exchanging t and ω we see that `RW ξ` is a random variable of `ℕ → Grid d`, why is the definition the other way around?
 def RW (ξ : (t : ℕ) → Ω → Grid d) (t : ℕ) (ω : Ω) : Grid d :=
   walkOfSteps (fun s ↦ ξ s ω) t
 
-/-- Another equivalent definition with non-fixed `ω : Ω` -/
+/-- Another equivalent definition with non-fixed `ξ`, `t` and `ω` -/
 def RW_def : RW = fun (ξ : (t : ℕ) → Ω → Grid d) (t : ℕ) (ω : Ω) ↦ walkOfSteps (fun s ↦ ξ s ω) t := by rfl
 
 /-- The position of a random walk is a random variable (measurable) if the steps are random
@@ -58,8 +60,35 @@ lemma RW.measurable {ξ : (t : ℕ) → Ω → Grid d} (ξ_mble : ∀ t, Measura
     simp_rw [RW_def, walkOfSteps, Finset.sum_range_succ]
     simp_rw [RW_def, walkOfSteps] at ih
     apply Measurable.add
-    exact ih
-    exact ξ_mble t
+    · exact ih
+    · exact ξ_mble t
+
+
+def RW2 (ξ : (t : ℕ) → Ω → Grid d) (ω : Ω) (t : ℕ) : Grid d :=
+  walkOfSteps (fun s ↦ ξ s ω) t
+
+lemma RW2.measurable {ξ : (t : ℕ) → Ω → Grid d} (ξ_mble : ∀ t, Measurable (ξ t)) :
+    Measurable (RW2 ξ) := by
+  unfold RW2
+  rw [measurable_pi_iff]
+  intro t
+  rw [measurable_pi_iff]
+  intro x
+  have ξ_mble_t := ξ_mble t
+  induction' t with t ih
+  · apply measurable_const
+  · specialize ih (ξ_mble t)
+    -- TODO is there a way to rewrite RW directly?
+    simp_rw [walkOfSteps, Finset.sum_range_succ]
+    simp_rw [walkOfSteps] at ih
+    apply Measurable.add
+    · exact ih
+    ·
+      specialize ξ_mble t
+      rw [measurable_pi_iff] at ξ_mble
+      apply ξ_mble
+
+
 
 end RandomWalkOfSteps
 
@@ -763,7 +792,7 @@ lemma summable_weighted_occupation {walk : (t : ℕ) → Grid d}
 -- At least the general helper lemma `summable_of_abs_le_of_tsum_ne_top` can be used here.
 -- The earlier tricks (Fubini variants and juggling between sums and integrals w.r.t
 -- counting measures) can also come in handy.
-  sorry
+  -- sorry
 
 /-- A summability criterion for (basically) regularized walk occupations. -/
 lemma summable_regularized_occupation {walk : (t : ℕ) → Grid d} {r : ℝ≥0} (r_lt_one : r < 1) :
