@@ -1,14 +1,11 @@
 {
-  description = "Constructive Logic and Formal Proof High-school Course";
+  description = "Polya-lean";
 
   inputs = {
     flake-parts.url = "github:hercules-ci/flake-parts";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    # nixpkgs_xhalo32.url = "github:xhalo32/nixpkgs";
     devenv.url = "github:cachix/devenv";
-    lean4 = {
-      url = "github:leanprover/lean4";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs =
@@ -31,83 +28,17 @@
           ...
         }:
         let
-          lib = pkgs.lib;
-          pythonOverrides = [
-            (final: prev: {
-              plasTeX = pkgs.python3Packages.buildPythonPackage rec {
-                pname = "plasTeX";
-                version = "3.1";
-                src = pkgs.fetchPypi {
-                  inherit pname version;
-                  hash = "sha256-ai7n+8plYdP0y9ef4/SRi5BUdXOCxUIrn9oyTWRqt30=";
-                };
+          # pkgs_xhalo32 = inputs.nixpkgs_xhalo32.legacyPackages.${system};
+          # inherit (pkgs_xhalo32.python312Packages) leanblueprint;
 
-                propagatedBuildInputs = with final; [
-                  typing-extensions
-                  pillow
-                  jinja2
-                  unidecode
-                ];
-
-                doCheck = false; # TODO
-              };
-
-              plastexdepgraph = pkgs.python3Packages.buildPythonPackage rec {
-                pname = "plastexdepgraph";
-                version = "0.0.4";
-                src = pkgs.fetchPypi {
-                  inherit pname version;
-                  hash = "sha256-LUw76Kn80lbGG67uTBWaQQfpjnSkUfCoD2wvcFv41L0=";
-                };
-
-                propagatedBuildInputs = with final; [
-                  pygraphviz
-                  plasTeX
-                ];
-              };
-
-              plastexshowmore = pkgs.python3Packages.buildPythonPackage rec {
-                pname = "plastexshowmore";
-                version = "0.0.2";
-                src = pkgs.fetchPypi {
-                  inherit pname version;
-                  hash = "sha256-8f6nIl6ufivT+RI1w2ySMQh+N5NZPIwTnDlVzQCPC1E=";
-                };
-
-                propagatedBuildInputs = with final; [ plasTeX ];
-              };
-
-              leanblueprint = pkgs.python3Packages.buildPythonPackage rec {
-                pname = "leanblueprint";
-                version = "0.0.10";
-                src = pkgs.fetchPypi {
-                  inherit pname version;
-                  hash = "sha256-z514yxhEcJwVIKae38cEkEZgyC4NoxCbokhGgBPQZvc=";
-                };
-                propagatedBuildInputs = with final; [
-                  plasTeX
-                  plastexshowmore
-                  plastexdepgraph
-                  click
-                  rich
-                  rich-click
-                  tomlkit
-                  jinja2
-                  GitPython
-                ];
-
-                doCheck = false;
-              };
-            })
-          ];
-          python = pkgs.python3.override { packageOverrides = lib.composeManyExtensions pythonOverrides; };
-          leanblueprint = (python.withPackages (p: [ p.leanblueprint ]));
           watch-blueprint = pkgs.writeShellScriptBin "watch-blueprint" ''
-            echo "Watching for changes in blueprint/src/content.tex..."
-            ${pkgs.inotify-tools}/bin/inotifywait -q -e close_write,moved_to,create -r -m ./blueprint/src/content.tex |
+            rm -rf blueprint/web
+            leanblueprint web
+            echo "Watching for changes in blueprint/src/..."
+            ${pkgs.inotify-tools}/bin/inotifywait -q -e close_write,moved_to,create -r -m ./blueprint/src/*.tex |
               while read -r directory events filename; do
                 rm -rf blueprint/web
-                ${leanblueprint}/bin/leanblueprint web
+                leanblueprint web
               done
           '';
         in
@@ -117,21 +48,16 @@
           # system.
 
           devenv.shells.default = {
-            packages =
-              [
-                leanblueprint
-                watch-blueprint
-                # inputs.lean4.packages.${system}.lake
-                pkgs.elan
-              ]
-              ++ (with inputs.lean4.packages.${system}; [
-                #lean
-                #leanc
-              ]);
+            packages = [
+              # leanblueprint
+              watch-blueprint
+              pkgs.python3Packages.pygraphviz
+              pkgs.elan
+            ];
             languages.python = {
               enable = true;
-              package = python;
-              # venv.enable = true;
+              # package = python;
+              venv.enable = true;
             };
           };
         };
