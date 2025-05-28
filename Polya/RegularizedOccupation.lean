@@ -615,7 +615,7 @@ variable {Ω : Type*} [MeasurableSpace Ω] (P : Measure Ω) [IsProbabilityMeasur
 variable {d : ℕ}
 
 -- Niklas comment: Would it make more sense to define Lebesgue integral version, and show that it is equal to this?
-/-- The regularized Green's function `G_λ(x)` of a random walk. -/
+/-- The regularized Green's function `Gᵣ(x)` of a random walk. -/
 def regularizedG (X : (t : ℕ) → Ω → Grid d) (r : ℝ≥0∞) (x : Grid d) : ℝ :=
   ∫ ω, ENNReal.toReal (regularizedOccupation X r x ω) ∂P
 
