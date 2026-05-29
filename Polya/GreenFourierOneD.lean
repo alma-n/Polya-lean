@@ -54,8 +54,6 @@ variable (G : ℝ≥0 → ℤ → ℝ)
 def Gl1 : ℝ≥0 → lp (fun (_ : ℤ) ↦ ℂ) 1 := fun r ↦ {
   val := fun x ↦ G r x
   property := by
-    simp only [lp, Memℓp, one_ne_zero, ↓reduceIte, one_ne_top, Complex.norm_eq_abs, one_toReal,
-               Real.rpow_one, AddSubgroup.mem_mk, Set.mem_setOf_eq, Complex.abs_ofReal]
     -- Need to prove summability of `x ↦ |G r x|`. (Assume `0 ≤ r < 1`, otherwise give junk!)
 
     -- Of course this cannot be proven for the mock `G` here, but it should be proven for the
@@ -98,10 +96,10 @@ variable {d : ℕ} (X : ℕ → Ω → Grid d)
 noncomputable def regularizedG.l1 : ℝ≥0 → lp (fun (_ : Grid d) ↦ ℂ) 1 := fun r ↦ {
   val := if r < 1 then fun x ↦ regularizedG P X r x else fun _ ↦ 0 -- junk if `r ≥ 1`.
   property := by
-    simp only [lp, Memℓp, one_ne_zero, ↓reduceIte, one_ne_top, Complex.norm_eq_abs, one_toReal,
-               Real.rpow_one, AddSubgroup.mem_mk, Set.mem_setOf_eq]
+    suffices Summable fun i => ‖(if r < 1 then fun x ↦ (regularizedG P X r x : ℂ) else fun x ↦ 0) i‖ by
+      simpa [lp, Memℓp]
     by_cases hr : 1 ≤ r
-    · simpa [show ¬ r < 1 from not_lt.mpr hr] using summable_zero
+    · simp [show ¬ r < 1 from not_lt.mpr hr]
     · -- (Case: "not junk". Math content starts from here.)
       sorry
   }
