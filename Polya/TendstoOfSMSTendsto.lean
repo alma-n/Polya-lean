@@ -1,29 +1,11 @@
 module
 
-public import Mathlib
-
--- section
-
--- open MeasureTheory Topology Filter ENNReal BigOperators
-
--- variable {Ω : Type*} [MeasurableSpace Ω] (P : Measure Ω) [IsProbabilityMeasure P]
--- variable {d : ℕ}
-
--- lemma has_strict_mono_subseq_of_tendsto_nhdsWithin {xs : ℕ → ℝ} (hxs : Tendsto xs atTop (𝓝[<] x)) :
---     ∃ φ : ℕ → ℕ, StrictMono φ ∧ StrictMono (xs ∘ φ) ∧ Tendsto (xs ∘ φ) atTop (𝓝[<] x) := by
-
--- lemma tendsto_of_strictMono_seq_tendsto {Y : Type*} (F : Filter Y) (g : ℝ → Y) (hg : ∀ xs : ℕ → ℝ, StrictMono xs → Tendsto xs atTop (𝓝 x) → (Tendsto (g ∘ xs) atTop F)) :
---     Tendsto g (𝓝[<] x) F := by
-
--- lemma regularizedG_tendsTo (X_mble : ∀ t, Measurable (X t)) :
---     Tendsto (fun r => regularizedG P X r 0) (𝓝[<] 1) (𝓝 (∫ ω, ENNReal.toReal  (regularizedOccupation (d := d) X 1 0 ω) ∂P)) := by
-
---   sorry
-
--- end
+public import Mathlib.Algebra.Order.Ring.Star
+public import Mathlib.Topology.Instances.Nat
+public import Mathlib.Topology.Metrizable.Uniformity
 
 @[expose]
-public section more_general
+public section
 
 open Topology Filter
 
@@ -66,8 +48,6 @@ lemma xs_φ_strictMono {a : ℕ} (h : ∀ n ≥ a, ∃ m > n, xs n < xs m) : Str
 
 variable {F : Filter α} [TopologicalSpace ι] [ClosedIicTopology ι]
 
-#check instIsCountablyGeneratedNhds
-
 -- This proof is kind of ugly :(
 lemma eventually_forall_exists_gt_of_nhdsWithin (hxs : Tendsto xs atTop (𝓝[<] x)) :
   ∃ a, ∀ n ≥ a, ∃ m > n, xs n < xs m := by
@@ -103,4 +83,4 @@ lemma tendsto_of_strictMono_seq_tendsto
   use φ
   exact tendsto_def.mpr hf
 
-end more_general
+end
