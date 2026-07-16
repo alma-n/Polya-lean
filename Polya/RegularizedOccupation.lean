@@ -1,6 +1,7 @@
 module
 
 public import Polya.WalkRegularizedOccupation
+public import Polya.Grid
 
 public section
 

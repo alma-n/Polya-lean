@@ -33,7 +33,7 @@ lemma RW2.measurable {ξ : (t : ℕ) → Ω → Grid d} (ξ_mble : ∀ t, Measur
   unfold RW2
   rw [measurable_pi_iff]
   intro t
-  rw [measurable_pi_iff]
+  apply measurable_pi_iff.mpr
   intro x
   have ξ_mble_t := ξ_mble t
   induction t with
@@ -42,7 +42,4 @@ lemma RW2.measurable {ξ : (t : ℕ) → Ω → Grid d} (ξ_mble : ∀ t, Measur
     specialize ih (ξ_mble n)
     simp_rw [walkOfSteps, Finset.sum_range_succ]
     simp_rw [walkOfSteps] at ih
-    apply Measurable.add ih
-    · specialize ξ_mble n
-      rw [measurable_pi_iff] at ξ_mble
-      apply ξ_mble
+    exact Measurable.add ih (measurable_pi_iff.mp (ξ_mble n) _)

@@ -76,9 +76,12 @@ lemma fourier_convolution_eq (f g : Grid d → ℂ) (hf : f ∈ ℓ¹(Grid d, �
   simp_rw [invFourierSeries_eq, convolution_eq_tsum _ _ hf hg]
   simp
   simp_rw [← tsum_mul_right]
+  -- This should not be neccesary, but rw [mFourierAdd] does not work
+  have (x y : Grid d) : mFourier (x + y) θ = mFourier x θ * mFourier y θ := by
+    exact @mFourier_add (Fin d) (Fin.fintype d) y θ x
   conv =>
     enter [1, 1, x, 1, z]
-    rw [show mFourier x = mFourier (x - z + z) by simp, mFourier_add]
+    rw [show mFourier x = mFourier (x - z + z) by simp, this (x - z) z]
     tactic =>
       suffices f z * g (x - z) * ((mFourier (x - z)) θ * (mFourier z) θ) = (f z * (mFourier z) θ) *
           (g (x - z) * ((mFourier (x - z)) θ)) by
@@ -96,11 +99,8 @@ lemma fourier_convolution_eq (f g : Grid d → ℂ) (hf : f ∈ ℓ¹(Grid d, �
         right_inv x := by norm_num
     }
     exact e.tsum_eq (f := fun x => g x * (mFourier x) θ)
-  · have : (Function.uncurry fun z x ↦ f z * (mFourier z) θ * (g (x - z) * (mFourier (x - z)) θ)) =
-      fun (x : Grid d × Grid d) => ((fun (z : Grid d × Grid d) ↦ f z.1 * (mFourier z.1) θ *
-        (g z.2 * (mFourier  z.2) θ)) ∘ (fun (x : Grid d × Grid d) => (x.1, x.2 - x.1))) x := by
-        rfl
-    rw [this]
+  · change Summable (fun (x : Grid d × Grid d) => ((fun (z : Grid d × Grid d) ↦ f z.1 * (mFourier z.1) θ *
+        (g z.2 * (mFourier  z.2) θ)) ∘ (fun (x : Grid d × Grid d) => (x.1, x.2 - x.1))) x)
     apply Summable.comp_injective
     · have gonaf : Summable (fun z => ‖f z * (mFourier z) θ‖) := by
         simp_rw [← smul_eq_mul]
@@ -129,7 +129,8 @@ lemma invFourierSeries_eq_of_eq_single_add_convolution {r : ℂ}
       have : ∀ (y : Grid d), y ≠ 0 → (Pi.single 0 (M := fun _ => ℂ) 1) y * (mFourier y) θ = 0 := by
         intro y hy
         simp [hy]
-      rw [tsum_eq_single 0 this, mFourier_zero, Pi.single_eq_same, ContinuousMap.one_apply, mul_one]
+      rw [tsum_eq_single 0 this, show mFourier (0 : Grid d) = 1 by exact mFourier_zero,
+        Pi.single_eq_same, ContinuousMap.one_apply, mul_one]
     · nth_rw 2 [← this]
       rw [Summable.tsum_add]
       · congr 1

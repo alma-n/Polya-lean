@@ -1,14 +1,9 @@
-import Polya.RegularizedOccupation
+import Polya.Grid
 
 open MeasureTheory
 open scoped lp Convolution
 
 section convolution
-
--- Need to get rid of this, but too lazy at the moment
-noncomputable
-local instance : MeasureSpace (Grid d) where
-  volume := Measure.count
 
 variable {d : ℕ}
 
