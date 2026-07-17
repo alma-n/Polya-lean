@@ -10,12 +10,15 @@ package «Polya» where
 
 require VersoBlueprint from git "https://github.com/leanprover/verso-blueprint"@"v4.30.0"
 
+-- require Verso from git "https://github.com/leanprover/verso"@"v4.30.0"
+
 -- must be last, otherwise mathlib post-update hooks break :o
 require mathlib from git
   "https://github.com/leanprover-community/mathlib4.git" @ "v4.30.0"
 
 @[default_target]
 lean_lib Blueprint where
+  globs := Glob.submodules `Blueprint
 
 lean_exe «blueprint-gen» where
   root := `BlueprintMain

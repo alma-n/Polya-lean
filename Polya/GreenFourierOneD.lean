@@ -6,7 +6,7 @@ public import Mathlib.Analysis.CStarAlgebra.Classes
 public import Mathlib.Analysis.Fourier.AddCircle
 public import Mathlib.Analysis.Fourier.FourierTransform
 public import Mathlib.LinearAlgebra.Complex.FiniteDimensional
-public import Polya.RegularizedOccupation
+public import Polya.RegularizedG
 @[expose] public section
 
 open MeasureTheory Topology Filter
@@ -89,7 +89,8 @@ lemma fourierCoeff_Ghat_eq (r : ℝ≥0) (x : ℤ) :
 Fourier inverse transform) of its Fourier transform. -/
 lemma G_eq_integral_Ghat (r : ℝ≥0) (x : ℤ) :
     G r x = (2*π)⁻¹ * ∫ (θ : ℝ) in (-π)..π, (fourier (T := 2*π) (-x)) θ • (Ghat G r θ) := by
-  suffices G r x = (1/(2*π)) • ∫ (θ : ℝ) in (-π)..(-π + 2 * π), (fourier (T := 2*π) (-x)) θ • (Ghat G r θ) by
+  suffices G r x = (1/(2*π)) • ∫ (θ : ℝ) in (-π)..(-π + 2 * π), (fourier (T := 2*π) (-x)) θ •
+  (Ghat G r θ) by
     rw [← smul_eq_mul]
     rw [← inv_eq_one_div] at this
     exact_mod_cast by grind
@@ -154,7 +155,8 @@ noncomputable def regularizedG₁.hat (X_mble : ∀ t : ℕ, Measurable (X₁ t)
 
 /-- The inverse Fourier transform of the Fourier transform of the (in dimension 1)
 regularized Green's function is the regularized Green's function. -/
-lemma fourierCoeff_regularizedG₁hat_eq (X_mble : ∀ t : ℕ, Measurable (X₁ t)) (r : ℝ≥0) (r_lt_one : r < 1) (n : ℤ) :
+lemma fourierCoeff_regularizedG₁hat_eq
+    (X_mble : ∀ t : ℕ, Measurable (X₁ t)) (r : ℝ≥0) (r_lt_one : r < 1) (n : ℤ) :
     (fourierCoeff (T := 2*π) (regularizedG₁.hat P X_mble r)) n
       = regularizedG P X₁ r (Grid₁.toZ.symm n) := by
   rw [regularizedG₁.hat, ← fourierBasis_repr]
@@ -205,7 +207,7 @@ lemma continuous_regularizedG₁hat (X_mble : ∀ t : ℕ, Measurable (X₁ t)) 
   sorry
 
 lemma integrable_regularizedG₁hat (X_mble : ∀ t : ℕ, Measurable (X₁ t)) (r : ℝ≥0) (r_lt_one : r < 1) : Integrable (fun θ ↦ (regularizedG₁.hat P X_mble r θ).re) := by
-  
+
   -- AEEqFun.integrable_iff_mem_L1
   sorry
   -- Gr₁hat ∈ L² ⊆ L¹ = integrable
@@ -252,8 +254,8 @@ lemma mainIntegral_eq_add {r δ : ℝ≥0} (X_mble : ∀ t : ℕ, Measurable (X�
   · apply MeasurableSet.nullMeasurableSet
     exact measurableSet_ball
   · apply Integrable.integrableOn
-    -- exact integrable_regularizedG₁hat P X_mble r r_lt_one
     have := integrable_regularizedG₁hat P X_mble r r_lt_one
+
     sorry
   · apply Integrable.integrableOn
     have := integrable_regularizedG₁hat P X_mble r r_lt_one
