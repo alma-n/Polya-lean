@@ -1,6 +1,6 @@
 # Pólya's theorem Lean
 
-[Blueprint](https://alma-n.github.io/Polya-lean/blueprint)
+[Blueprint](https://alma-n.github.io/Polya-lean)
 
 
 ## Building the blueprint
