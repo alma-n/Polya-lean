@@ -4,16 +4,14 @@ open UnitAddTorus MeasureTheory
 
 variable {d : ℕ}
 
-noncomputable
-local instance : MeasureSpace (Grid d) where
-  volume := Measure.count
+notation "π" => Real.pi
 
 lemma invFourierSeries_eq {f : Grid d → ℂ} :
-    invFourierSeries f = fun θ => ∑' (x : Grid d), f x • (mFourier x) θ := by
+    invFourierSeries f = fun θ => ∑' (x : Grid d), f x • (mFourier x) θ :=
   rfl
 
 lemma invFourierSeries_eq' {f : Grid d → ℂ} (θ : UnitAddTorus (Fin d)) :
-    invFourierSeries f θ = ∑' (x : Grid d), f x • (mFourier x) θ := by
+    invFourierSeries f θ = ∑' (x : Grid d), f x • (mFourier x) θ :=
   rfl
 
 lemma invFourierSeries_single_eq (x : Grid d) :
@@ -65,6 +63,14 @@ lemma norm_invFourierSeries_le_norm
   · simp_rw [← norm_mul]
     apply summable_invFourier hf
 
+-- This might belong in a different file
+lemma integral_invFourierSeries_eq (f : Grid d → ℂ) (hf : f ∈ ℓ¹(Grid d, ℂ)) (x : Grid d) :
+    f x = ((2 * π)^d)⁻¹ * ∫ (θ : UnitAddTorus (Fin d)), (mFourier (-x)) θ * invFourierSeries f θ := by
+  rw [invFourierSeries_eq]
+  dsimp only
+  simp_rw [← tsum_mul_left]
+  sorry
+
 open scoped Convolution
 
 #check Real.fourier_mul_convolution_eq
@@ -99,8 +105,9 @@ lemma fourier_convolution_eq (f g : Grid d → ℂ) (hf : f ∈ ℓ¹(Grid d, �
         right_inv x := by norm_num
     }
     exact e.tsum_eq (f := fun x => g x * (mFourier x) θ)
-  · change Summable (fun (x : Grid d × Grid d) => ((fun (z : Grid d × Grid d) ↦ f z.1 * (mFourier z.1) θ *
-        (g z.2 * (mFourier  z.2) θ)) ∘ (fun (x : Grid d × Grid d) => (x.1, x.2 - x.1))) x)
+  · change Summable (fun (x : Grid d × Grid d) => ((fun (z : Grid d × Grid d) ↦
+      f z.1 *(mFourier z.1) θ * (g z.2 * (mFourier  z.2) θ)) ∘ (fun (x : Grid d × Grid d) =>
+        (x.1, x.2 - x.1))) x)
     apply Summable.comp_injective
     · have gonaf : Summable (fun z => ‖f z * (mFourier z) θ‖) := by
         simp_rw [← smul_eq_mul]
@@ -135,8 +142,8 @@ lemma invFourierSeries_eq_of_eq_single_add_convolution {r : ℂ}
       rw [Summable.tsum_add]
       · congr 1
         simp_rw [mul_assoc]
-        rw [Summable.tsum_mul_left,
-        Summable.tsum_mul_left _ (Summable.mul_left _ (summable_invFourier' hp))]
+        rw [Summable.tsum_mul_left, Summable.tsum_mul_left _ (Summable.mul_left _
+          (summable_invFourier' hp))]
         · congr 1
           simp_rw [← smul_eq_mul]
           rw [← invFourierSeries_eq', ← invFourierSeries_eq']
@@ -167,5 +174,4 @@ lemma invFourierSeries_eq_inv_of_eq_single_add_convolution {r : ℂ}
   have : invFourierSeries g * (1 - r • invFourierSeries p) = 1 := by
     rw [mul_sub, mul_one, Algebra.mul_smul_comm, ← Algebra.smul_mul_assoc]
     exact this
-  apply inv_eq_of_mul_eq_one_left at this
-  exact this.symm
+  exact (inv_eq_of_mul_eq_one_left this).symm

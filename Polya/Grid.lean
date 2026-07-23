@@ -20,4 +20,6 @@ instance : FunLike (Grid d) (Fin d) ℤ where
   coe := id
   coe_injective' := Function.injective_id
 
+@[ext] lemma Grid.ext (x y : Grid d) (h : (∀ i, x i = y i)) : x = y := funext h
+
 end

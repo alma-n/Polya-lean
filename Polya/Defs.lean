@@ -8,10 +8,9 @@ public noncomputable section defs
 open MeasureTheory ENNReal UnitAddTorus
 
 /-- The integer grid in `d` dimensions. -/
+@[implicit_reducible]
 def Grid d := Fin d → ℤ
-deriving DecidableEq, MeasurableSpace, MeasurableEq, MeasurableAdd₂, AddCommGroup
-
-#print instMeasurableSpaceGrid._aux_1
+deriving DecidableEq, MeasurableSpace, MeasurableEq, MeasurableAdd₂, SeminormedAddCommGroup
 
 variable {d : ℕ}
 
@@ -40,9 +39,26 @@ def regularizedOccupation (X : (t : ℕ) → Ω → Grid d) (r : ℝ≥0∞) (x 
 def regularizedG (X : (t : ℕ) → Ω → Grid d) (r : ℝ≥0∞) (x : Grid d) : ℝ :=
   ∫ ω, ENNReal.toReal (regularizedOccupation X r x ω) ∂P
 
--- TODO yleistä ℂ johonkin vektoriavaruuteen
+-- Does not seem possible to generalize, since mFourier uses ℂ for some reason.
 noncomputable
 def invFourierSeries (f : Grid d → ℂ) (θ : UnitAddTorus (Fin d)) : ℂ :=
   ∑' (x : Grid d), f x • (mFourier x) θ
+
+def nnGrid : SimpleGraph (Grid d) where
+  Adj x y := ∑ i, |x i - y i| = 1
+  symm x y h := by
+    grind
+  loopless := by
+    apply irrefl_def.mpr
+    intro x
+    simp
+
+instance : DecidableRel (nnGrid (d := d)).Adj := by
+  intro a b
+  unfold SimpleGraph.Adj
+  exact (∑ i, |a i - b i|).decEq 1
+
+noncomputable
+def pSRW (x : Grid d) : ℂ := if nnGrid.Adj 0 x then (2 * d)⁻¹ else 0
 
 end defs

@@ -19,10 +19,12 @@ def φ {a : ℕ} (h : ∀ n ≥ a, ∃ m > n, xs n < xs m) : ℕ → {n:ℕ // n
     grind
   ⟩
 
-lemma φ_spec₁ (h : ∀ n ≥ a, ∃ m > n, xs n < xs m) (n : ℕ) : (φ h (n + 1)) > φ h n := (h (φ h n) (Subtype.prop _)).choose_spec.1
-lemma φ_spec₂ (h : ∀ n ≥ a, ∃ m > n, xs n < xs m) (n : ℕ) : xs (φ h n) < xs (φ h (n + 1)) := (h (φ h n) (Subtype.prop _)).choose_spec.2
+lemma φ_spec₁ {a : ℕ} (h : ∀ n ≥ a, ∃ m > n, xs n < xs m) (n : ℕ) : (φ h (n + 1)) > φ h n :=
+  (h (φ h n) (Subtype.prop _)).choose_spec.1
+lemma φ_spec₂ {a : ℕ} (h : ∀ n ≥ a, ∃ m > n, xs n < xs m) (n : ℕ) : xs (φ h n) < xs (φ h (n + 1)) :=
+  (h (φ h n) (Subtype.prop _)).choose_spec.2
 
-lemma φ_strictMono (h : ∀ n ≥ a, ∃ m > n, xs n < xs m) : StrictMono (fun n => φ h n) := by
+lemma φ_strictMono {a : ℕ} (h : ∀ n ≥ a, ∃ m > n, xs n < xs m) : StrictMono (fun n => φ h n) := by
   intro n m hnm
   simp
   induction m with
@@ -34,7 +36,8 @@ lemma φ_strictMono (h : ∀ n ≥ a, ∃ m > n, xs n < xs m) : StrictMono (fun 
       · specialize ih (by grind)
         apply lt_trans ih (φ_spec₁ h _)
 
-lemma xs_φ_strictMono {a : ℕ} (h : ∀ n ≥ a, ∃ m > n, xs n < xs m) : StrictMono (xs ∘ (fun n => (φ h n : ℕ))) := by
+lemma xs_φ_strictMono {a : ℕ} (h : ∀ n ≥ a, ∃ m > n, xs n < xs m) :
+    StrictMono (xs ∘ (fun n => (φ h n : ℕ))) := by
   intro n m hnm
   simp
   induction m with
@@ -49,7 +52,7 @@ lemma xs_φ_strictMono {a : ℕ} (h : ∀ n ≥ a, ∃ m > n, xs n < xs m) : Str
 variable {F : Filter α} [TopologicalSpace ι] [ClosedIicTopology ι]
 
 -- This proof is kind of ugly :(
-lemma eventually_forall_exists_gt_of_nhdsWithin (hxs : Tendsto xs atTop (𝓝[<] x)) :
+lemma eventually_forall_exists_gt_of_nhdsWithin {x : ι} (hxs : Tendsto xs atTop (𝓝[<] x)) :
   ∃ a, ∀ n ≥ a, ∃ m > n, xs n < xs m := by
     rw [tendsto_nhdsWithin_iff] at hxs
     obtain ⟨hxs, hx⟩ := hxs
@@ -64,8 +67,8 @@ lemma eventually_forall_exists_gt_of_nhdsWithin (hxs : Tendsto xs atTop (𝓝[<]
     specialize this n (by grind)
     grind
 
-lemma has_strict_mono_subseq_of_tendsto_nhdsWithin (hxs : Tendsto xs atTop (𝓝[<] x)) :
-    ∃ φ : ℕ → ℕ, StrictMono φ ∧ StrictMono (xs ∘ φ) ∧ Tendsto (xs ∘ φ) atTop (𝓝[<] x) := by
+lemma has_strict_mono_subseq_of_tendsto_nhdsWithin {x : ι} (hxs : Tendsto xs atTop (𝓝[<] x)) :
+      ∃ φ : ℕ → ℕ, StrictMono φ ∧ StrictMono (xs ∘ φ) ∧ Tendsto (xs ∘ φ) atTop (𝓝[<] x) := by
     have ⟨a, h⟩ := eventually_forall_exists_gt_of_nhdsWithin hxs
     refine ⟨fun n => φ h n, φ_strictMono h, xs_φ_strictMono h, ?_⟩
     rw [tendsto_iff_seq_tendsto] at hxs
@@ -73,7 +76,7 @@ lemma has_strict_mono_subseq_of_tendsto_nhdsWithin (hxs : Tendsto xs atTop (𝓝
 
 variable [SecondCountableTopology ι]
 
-lemma tendsto_of_strictMono_seq_tendsto
+lemma tendsto_of_strictMono_seq_tendsto {x : ι}
     (hf : ∀ xs : ℕ → ι, StrictMono xs → Tendsto xs atTop (𝓝 x) → (Tendsto (f ∘ xs) atTop F)) :
     Tendsto f (𝓝[<] x) F := by
   apply Filter.tendsto_of_subseq_tendsto
