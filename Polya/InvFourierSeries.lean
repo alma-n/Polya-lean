@@ -63,28 +63,26 @@ lemma norm_invFourierSeries_le_norm
   · simp_rw [← norm_mul]
     apply summable_invFourier hf
 
--- This might belong in a different file
-lemma integral_invFourierSeries_eq (f : Grid d → ℂ) (hf : f ∈ ℓ¹(Grid d, ℂ)) (x : Grid d) :
-    f x = ((2 * π)^d)⁻¹ * ∫ (θ : UnitAddTorus (Fin d)), (mFourier (-x)) θ * invFourierSeries f θ := by
+lemma invFourierSeries_measurable (f : Grid d → ℂ) :
+    Measurable (invFourierSeries f) := by
   rw [invFourierSeries_eq]
-  dsimp only
-  simp_rw [← tsum_mul_left]
-  sorry
+  measurability
+
+
 
 open scoped Convolution
 
 #check Real.fourier_mul_convolution_eq
 
+-- TODO make less ugly
 lemma fourier_convolution_eq (f g : Grid d → ℂ) (hf : f ∈ ℓ¹(Grid d, ℂ)) (hg : g ∈ ℓ¹(Grid d, ℂ)) :
     invFourierSeries (f ⋆[ContinuousLinearMap.lsmul ℂ ℂ, volume] g)
     = (invFourierSeries f) * (invFourierSeries g) := by
   ext θ
-  simp_rw [invFourierSeries_eq, convolution_eq_tsum _ _ hf hg]
-  simp
-  simp_rw [← tsum_mul_right]
-  -- This should not be neccesary, but rw [mFourierAdd] does not work
+  simp_rw [invFourierSeries_eq, convolution_eq_tsum _ _ hf hg, smul_eq_mul, Pi.mul_apply,
+    ← tsum_mul_right]
   have (x y : Grid d) : mFourier (x + y) θ = mFourier x θ * mFourier y θ := by
-    exact @mFourier_add (Fin d) (Fin.fintype d) y θ x
+    rw [mFourier_add]
   conv =>
     enter [1, 1, x, 1, z]
     rw [show mFourier x = mFourier (x - z + z) by simp, this (x - z) z]
@@ -145,13 +143,10 @@ lemma invFourierSeries_eq_of_eq_single_add_convolution {r : ℂ}
         rw [Summable.tsum_mul_left, Summable.tsum_mul_left _ (Summable.mul_left _
           (summable_invFourier' hp))]
         · congr 1
-          simp_rw [← smul_eq_mul]
-          rw [← invFourierSeries_eq', ← invFourierSeries_eq']
-          simp_rw [smul_eq_mul]
-          rw [Summable.tsum_mul_left _ (summable_invFourier' hp)]
-          · simp_rw [← smul_eq_mul, ← invFourierSeries_eq', smul_eq_mul]
-            have := fourier_convolution_eq g p hg hp
-            simp [this]
+          simp_rw [← smul_eq_mul, ← invFourierSeries_eq', smul_eq_mul, Summable.tsum_mul_left _
+            (summable_invFourier' hp)]
+          · simp_rw [← smul_eq_mul, ← invFourierSeries_eq', smul_eq_mul, ← Pi.mul_apply,
+              (fourier_convolution_eq g p hg hp)]
         · rw [← summable_norm_iff]
           simp_rw [← smul_eq_mul]
           exact summable_invFourier (convolution_summable _ _ hg hp)
