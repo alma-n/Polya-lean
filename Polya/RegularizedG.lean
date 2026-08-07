@@ -126,7 +126,6 @@ lemma tsum_regularizedG_eq {X : (t : ℕ) → Ω → Grid d} {r : ℝ≥0}
     apply lt_of_le_of_lt (tsum_lintegral_norm_regularizedOccupation_le P X_mble _)
     simp [r_lt_one]
 
-
 lemma lt_of_strict_mono_tendsto {x : ℝ≥0∞} {xs : ℕ → ℝ≥0∞}
     (hx : 0 < x) (hx1 : StrictMono xs) (hx2 : Tendsto xs atTop (𝓝 x)) :
     ∀ n, xs n < x := by
@@ -152,7 +151,8 @@ lemma regularizedG_tendsto {X : ℕ → Ω → Grid d} (X_mble : ∀ t, Measurab
   apply tendsto_of_strictMono_seq_tendsto
   intro rs hr1 hr2
   simp_rw [regularizedG_eq]
-  have (r : ℝ≥0∞) (hr : r < 1) : ENNReal.ofReal (∫ (ω : Ω), (regularizedOccupation X r 0 ω).toReal ∂P) = (∫⁻ (ω : Ω), (regularizedOccupation X r 0 ω) ∂P) := by
+  have (r : ℝ≥0∞) (hr : r < 1) : ENNReal.ofReal (∫ (ω : Ω), (regularizedOccupation X r 0 ω).toReal
+      ∂P) = (∫⁻ (ω : Ω), (regularizedOccupation X r 0 ω) ∂P) := by
     rw [ofReal_integral_eq_lintegral_ofReal]
     · congr
       ext ω
@@ -161,15 +161,15 @@ lemma regularizedG_tendsto {X : ℕ → Ω → Grid d} (X_mble : ∀ t, Measurab
     · apply Eventually.of_forall
       simp
   have rs_lt_one := lt_of_strict_mono_tendsto (x := 1) (xs := rs) (by norm_num) hr1 hr2
-  change Tendsto (fun n ↦ ENNReal.ofReal (∫ (ω : Ω), (regularizedOccupation X (rs n) 0 ω).toReal ∂P)) _ _
+  change Tendsto (fun n ↦ ENNReal.ofReal
+    (∫ (ω : Ω), (regularizedOccupation X (rs n) 0 ω).toReal ∂P)) _ _
   simp_rw [this _ (rs_lt_one _)]
   apply lintegral_tendsto_of_tendsto_of_monotone
   · intro n
     exact Measurable.aemeasurable (regularizedOccupation.measurable X_mble (rs n) 0)
   · apply Eventually.of_forall
     intro x a b hab
-    apply regularizedOccupation_apply_mono
-    exact StrictMono.monotone hr1 hab
+    apply regularizedOccupation_apply_mono X 0 (StrictMono.monotone hr1 hab)
   · apply Eventually.of_forall
     intro ω
     have rs_tendsto_lt : Tendsto rs atTop (𝓝[<] 1) := by
@@ -181,7 +181,7 @@ lemma regularizedG_tendsto {X : ℕ → Ω → Grid d} (X_mble : ∀ t, Measurab
         exact Set.mem_Iio.mpr (rs_lt_one n)
     apply regularizedOccupation_apply_tendsto_of_monotone X (StrictMono.monotone hr1) rs_tendsto_lt 0
 
--- TODO make this less ugly (these should probably be in the GreenFourier file)
+-- TODO make this less ugly
 lemma regularizedG_summable {r : ℝ≥0} {X : (t : ℕ) → Ω → Grid d}
     (r_lt_one : r < 1) (X_mble : ∀ t, Measurable (X t)) :
     Summable (regularizedG P X r) := by
@@ -197,6 +197,21 @@ lemma regularizedG_summable {r : ℝ≥0} {X : (t : ℕ) → Ω → Grid d}
 
 open scoped lp
 
+lemma regularizedG_mem_l1 {r : ℝ≥0} {X : (t : ℕ) → Ω → Grid d}
+    (r_lt_one : r < 1) (X_mble : ∀ t, Measurable (X t)) :
+    regularizedG P X r ∈ ℓ¹(Grid d, ℝ) := by
+  apply memℓp_gen
+  simp only [toReal_one, Real.rpow_one, summable_norm_iff]
+  exact (regularizedG_summable P r_lt_one X_mble)
+
+lemma regularizedG'_mem_l1 {r : ℝ≥0} {X : (t : ℕ) → Ω → Grid d}
+    (r_lt_one : r < 1) (X_mble : ∀ t, Measurable (X t)) :
+    (fun x => Complex.ofReal (regularizedG P X r x)) ∈ ℓ¹(Grid d, ℂ) := by
+  have := regularizedG_summable P r_lt_one X_mble
+  apply memℓp_gen
+  simp only [Complex.norm_real, toReal_one, Real.rpow_one, summable_norm_iff]
+  exact this
+
 lemma regularizedG_square_summable {r : ℝ≥0} {X : ℕ → Ω → Grid d}
     (r_lt_one : r < 1) (X_mble : ∀ t, Measurable (X t)) :
     regularizedG P X r ∈ ℓ²(Grid d, ℝ) := by
@@ -204,3 +219,11 @@ lemma regularizedG_square_summable {r : ℝ≥0} {X : ℕ → Ω → Grid d}
   apply memℓp_gen
   simp only [Real.norm_eq_abs, toReal_one, Real.rpow_one]
   exact Summable.abs (regularizedG_summable P r_lt_one X_mble)
+
+lemma regularizedG_square_summable' {r : ℝ≥0} {X : ℕ → Ω → Grid d}
+    (r_lt_one : r < 1) (X_mble : ∀ t, Measurable (X t)) :
+    (fun x => Complex.ofReal (regularizedG P X r x)) ∈ ℓ²(Grid d, ℂ) := by
+  have := regularizedG_square_summable P r_lt_one X_mble
+  apply (memℓp_gen_iff (by simp)).mp at this
+  apply memℓp_gen
+  simp_all

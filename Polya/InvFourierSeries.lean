@@ -68,7 +68,60 @@ lemma invFourierSeries_measurable (f : Grid d → ℂ) :
   rw [invFourierSeries_eq]
   measurability
 
+lemma integrable_invFourierSeries_of_l1 (f : Grid d → ℂ) (hf : f ∈ ℓ¹(Grid d, ℂ)) :
+    Integrable (invFourierSeries f) := by
+  rw [invFourierSeries_eq, ← integrable_norm_iff]
+  · simp only [smul_eq_mul]
+    apply MeasureTheory.Integrable.mono' (g := fun a ↦ (∑' (x : Grid d), ‖f x‖))
+    · apply integrable_const
+    · measurability
+    · simp only [norm_norm]
+      apply Filter.Eventually.of_forall
+      intro θ
+      apply le_trans (norm_tsum_le_tsum_norm _)
+      · apply Summable.tsum_le_tsum
+        · intro i
+          have : ‖(mFourier i) θ‖ ≤ 1 := by
+            exact norm_mFourier_le_one
+          rw [← mul_one (‖f _‖), norm_mul]
+          exact mul_le_mul (by simp) this (by norm_num) (by norm_num)
+        · rw [summable_norm_iff]
+          exact summable_invFourier' hf
+        · apply (memℓp_gen_iff (by norm_num)).mp at hf
+          simp at hf
+          exact hf
+      · rw [summable_norm_iff]
+        exact summable_invFourier' hf
+  · measurability
 
+lemma square_integrable_invFourierSeries_of_l1 (f : Grid d → ℂ) (hf : f ∈ ℓ¹(Grid d, ℂ)) :
+    Integrable ((invFourierSeries f)^2) := by
+  rw [invFourierSeries_eq, ← integrable_norm_iff]
+  · simp only [smul_eq_mul, Pi.pow_apply, norm_pow]
+    apply MeasureTheory.Integrable.mono' (g := fun a ↦ (∑' (x : Grid d), ‖f x‖)^ 2)
+    · apply integrable_const
+    · measurability
+    · simp
+      apply Filter.Eventually.of_forall
+      intro θ
+      simp_rw [pow_two]
+      suffices ‖∑' (x_1 : Grid d), f x_1 * (mFourier x_1) θ‖ ≤ ∑' (x : Grid d), ‖f x‖ by
+        apply mul_self_le_mul_self (by simp) this
+      apply le_trans (norm_tsum_le_tsum_norm _)
+      · apply Summable.tsum_le_tsum
+        · intro i
+          have : ‖(mFourier i) θ‖ ≤ 1 := by
+            exact norm_mFourier_le_one
+          rw [← mul_one (‖f _‖), norm_mul]
+          exact mul_le_mul (by simp) this (by norm_num) (by norm_num)
+        · rw [summable_norm_iff]
+          exact summable_invFourier' hf
+        · apply (memℓp_gen_iff (by norm_num)).mp at hf
+          simp at hf
+          exact hf
+      · rw [summable_norm_iff]
+        exact summable_invFourier' hf
+  · measurability
 
 open scoped Convolution
 
